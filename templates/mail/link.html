@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Poppins:wght@100;300&family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">
+    <title>{{ appName }}</title>
+  </head>
+  <body style="display: flex; align-items:center; justify-content:center;font-family: 'Roboto', sans-serif;">
+    <div style="display: flex;  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;padding:2rem;">
+      <div style="text-align: center">
+        <img
+          style="max-width: 100%; height: auto"
+          width="175px"
+          height="175px"
+          src="cid:aplogo"
+        />
+        <h4 style="text-align: center; margin:0;">{{ appName }}</h4>
+      </div>
+
+      <div style="margin-left: 2rem;">  
+        <div style="line-height: normal; font-size: 14px; text-align: left; font-size:1rem;">
+            <h3 style="font-weight: bold">Dear user,</h3>
+
+            <p>{{ message }}</p>
+            <p>
+            <a href="{{ link }}">{{ link }}</a>
+            </p>
+            <p>
+            If you didn't request for this link. Please disregard this message.
+            </p>
+            <p>Thanks,<br/>The {{ appName }} Team</p>
+        </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,141 @@
+const User = require("../models/Users");
+const Role = require("../models/Roles");
+
+// entity/
+exports.browse = (req, res) =>
+  User.find()
+    .select("-password")
+    .populate({
+      path: "roleId",
+      select: "display_name name",
+    })
+    .then(users => res.json(users))
+    .catch(error => res.status(400).json({ error: error.message }));
+
+// entity/:userId/referral
+exports.referral = (req, res) =>
+  User.find()
+    .byRefferal(req.params.userId)
+    .select("-password")
+    .populate({
+      path: "roleId",
+      select: "display_name name",
+    })
+    .then(users => res.json(users.filter(user => !user.deletedAt)))
+    .catch(error => res.status(400).json({ error: error.message }));
+
+// entity/:id/find
+exports.getParentReferrer = (req, res) =>
+  User.findById(req.params.id)
+    .select("-password")
+    .populate({
+      path: "roleId",
+      select: "name",
+    })
+    .populate({
+        path : 'referrerId',
+        select: "roleId referrerId username",
+          populate:
+          [
+            {
+                path: 'referrerId',
+                select: "roleId referrerId username",
+                model: User,
+                  populate:
+                   [
+                      {
+                        path: 'referrerId',
+                        select: "roleId referrerId username",
+                        model: User,
+                          populate: {
+                              path: "roleId",
+                              select: "name",
+                          }
+                      }, 
+                      {
+                        path: 'roleId',
+                        select: "name",
+                        model: Role
+                      }
+                   ]
+            },
+            {
+                path: 'roleId',
+                select: "name",
+                model: Role
+            }
+        ],
+    })
+    .then(user => {
+        let data = {};
+        switch (user.roleId.name) {
+          // case "player":
+          //   if (user.referrerId.roleId?.name === "silver") {
+          //        data = {
+          //         "silver": user?.username,
+          //         "gold": user.referrerId?.username,
+          //         "admin": user.referrerId.referrerId?.username,
+          //       }
+          //     } else {
+          //       data = {
+          //         "silver": "none",
+          //         "gold": user?.username,
+          //         "admin": user?.referrerId?.username,
+          //       }
+          //     }
+          //   break;
+          case "silver":
+              data = {
+                  "silver": user?.username,
+                  "gold": user?.referrerId?.username,
+                  "admin": user?.referrerId.referrerId?.username,
+                }
+              break;
+          case "gold":
+              data = {
+                  "silver": "none",
+                  "gold": user?.username,
+                  "admin": user?.referrerId?.username,
+                }
+              break;
+            default:
+            data = {
+                "silver": "none",
+                "gold": "none",
+                "admin": user?.username,
+            }
+        }
+
+        res.json(data)
+    })
+    .catch(error => res.status(400).json({ error: error.message }));
+
+// entity/:id/find
+exports.find = (req, res) =>
+  User.findById(req.params.id)
+    .select("-password")
+    .populate({
+      path: "roleId",
+      select: "display_name name",
+    })
+    .then(user => res.json(user.deletedAt ? "User is banned!" : user))
+    .catch(error => res.status(400).json({ error: error.message }));
+
+// entity/:id/update
+exports.update = (req, res) =>
+  User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .select("-password")
+    .populate({
+      path: "roleId",
+      select: "display_name name",
+    })
+    .then(item => res.json(item))
+    .catch(error => res.status(400).json({ error: error.message }));
+
+// entity/:id/destroy
+exports.destroy = (req, res) =>
+  User.findByIdAndUpdate(req.params.id, {
+    deletedAt: new Date().toLocaleString(),
+  })
+    .then(() => res.json(`${req.params.id} deleted successfully`))
+    .catch(error => res.status(400).json({ error: error.message }));
