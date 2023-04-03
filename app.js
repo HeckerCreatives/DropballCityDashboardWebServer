@@ -14,13 +14,7 @@ mongoose.connect(process.env.ATLAS_URI, {
 });
 
 const corsConfig = {
-  // origin: "http://localhost:3000", // Do not use wildcard`
-  // origin: ["https://dropballcity.herokuapp.com", "http://localhost:3000"], // Do not use wildcard`
-  origin: [
-    "https://dropballcity.herokuapp.com",
-    "https://dropballcity-landingpage.herokuapp.com",
-    "http://localhost:3000"
-  ], // Do not use wildcard`
+  origin: "http://localhost:3000",
   methods: ["GET", "POST", "PUT", "DELETE"], // List only` available methods
   credentials: true, // Must be set to true
   allowedHeaders: [
