@@ -93,48 +93,77 @@ exports.browse = (req, res) =>
     .catch(error => res.status(400).json({ error: error.message }));
 
 // entity/
-exports.browse = (req, res) =>
-  Wallets.find()
-    .populate({
-      path: "userId",
-      select: "referrerId username",
-    })
-    .then(items => res.json(items.filter(item => !item.deletedAt)))
-    .catch(error => res.status(400).json({ error: error.message }));
+// module.exports.browse = (req, res) =>
+//   Wallets.find()
+//     .populate({
+//       path: "userId",
+//       select: "referrerId username",
+//     })
+//     .then(items => res.json(items.filter(item => !item.deletedAt)))
+//     .catch(error => res.status(400).json({ error: error.message }));
 
 // entity/
-exports.everything = (req, res) =>
-  Users.find()
-    .select("-password")
-    .populate({
+// exports.everything = (req, res) =>
+//     Users.find()
+//     .select("-password")
+//     .populate({
+//       path: "roleId",
+//       select: "display_name name",
+//     })
+//     .then(async list => {
+//       const noadmin = list.filter(u => u.roleId.name !== "admin");
+//       const users = noadmin.filter(u => !u.deletedAt);
+//       var collection = [];
+
+//       for (let index = 0; index < users.length; index++) {
+//         const checker = await Wallets.findOne({
+//           userId: users[index]._id,
+//         });
+//         if (checker) {
+//           collection.push(checker);
+//         } else {
+//           const create = await Wallets.create({
+//             userId: users[index]._id,
+//             amount: 0,
+//           });
+//           if (create) {
+//             collection.push(create);
+//           }
+//         }
+//       }
+
+//       res.json({ collection, users });
+//     })
+//     .catch(error => res.status(400).json({ error: error.message }));
+
+exports.everything = async (req, res) => {
+  try {
+    const userList = await Users.find().select("-password").populate({
       path: "roleId",
-      select: "display_name name",
-    })
-    .then(async list => {
-      const noadmin = list.filter(u => u.roleId.name !== "admin");
-      const users = noadmin.filter(u => !u.deletedAt);
-      var collection = [];
+      select: "display_name name"
+    });
 
-      for (let index = 0; index < users.length; index++) {
-        const checker = await Wallets.findOne({
-          userId: users[index]._id,
+    const users = userList.filter(user => user.roleId.name !== "admin" && !user.deletedAt);
+    
+    const walletPromises = users.map(async user => {
+      const wallet = await Wallets.findOne({ userId: user._id });
+      if (!wallet) {
+        return Wallets.create({
+          userId: user._id,
+          amount: 0
         });
-        if (checker) {
-          collection.push(checker);
-        } else {
-          const create = await Wallets.create({
-            userId: users[index]._id,
-            amount: 0,
-          });
-          if (create) {
-            collection.push(create);
-          }
-        }
       }
+      return wallet;
+    });
 
-      res.json({ collection, users });
-    })
-    .catch(error => res.status(400).json({ error: error.message }));
+    const collection = await Promise.all(walletPromises);
+    
+    res.json({ collection, users });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 // entity/
 exports.referrals = (req, res) =>
