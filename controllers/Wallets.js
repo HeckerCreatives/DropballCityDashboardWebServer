@@ -136,6 +136,7 @@ exports.browse = (req, res) =>
 //     })
 //     .catch(error => res.status(400).json({ error: error.message }));
 
+// entity/
 exports.everything = async (req, res) => {
   try {
     const userList = await Users.find().select("-password").populate({
@@ -166,37 +167,66 @@ exports.everything = async (req, res) => {
 
 
 // entity/
-exports.referrals = (req, res) =>
-  Users.find()
-    .byRefferal(req.params.userId)
-    .select("-password")
-    .populate({
+// exports.referrals = (req, res) =>
+//   Users.find()
+//     .byRefferal(req.params.userId)
+//     .select("-password")
+//     .populate({
+//       path: "roleId",
+//       select: "display_name name",
+//     })
+//     .then(async users => {
+//       var collection = [];
+
+//       for (let index = 0; index < users.length; index++) {
+//         const checker = await Wallets.findOne({
+//           userId: users[index]._id,
+//         });
+//         if (checker) {
+//           collection.push(checker);
+//         } else {
+//           const create = await Wallets.create({
+//             userId: users[index]._id,
+//             amount: 0,
+//           });
+//           if (create) {
+//             collection.push(create);
+//           }
+//         }
+//       }
+
+//       res.json({ collection, users });
+//     })
+//     .catch(error => res.status(400).json({ error: error.message }));
+
+// entity/
+exports.referrals = async (req, res) => {
+  try {
+    const userList = await Users.find().byRefferal(req.params.userId).populate({
       path: "roleId",
-      select: "display_name name",
-    })
-    .then(async users => {
-      var collection = [];
+      select: "display_name name"
+    });
+    
+    const users = userList;
 
-      for (let index = 0; index < users.length; index++) {
-        const checker = await Wallets.findOne({
-          userId: users[index]._id,
+    const walletPromises = users.map(async user => {
+      const wallet = await Wallets.findOne({ userId: user._id });
+      if (!wallet) {
+        return Wallets.create({
+          userId: user._id,
+          amount: 0
         });
-        if (checker) {
-          collection.push(checker);
-        } else {
-          const create = await Wallets.create({
-            userId: users[index]._id,
-            amount: 0,
-          });
-          if (create) {
-            collection.push(create);
-          }
-        }
       }
+      return wallet;
+    });
 
-      res.json({ collection, users });
-    })
-    .catch(error => res.status(400).json({ error: error.message }));
+    const collection = await Promise.all(walletPromises);
+    
+    res.json({ collection, users });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 // entity/:userId/find
 exports.find = (req, res) =>
