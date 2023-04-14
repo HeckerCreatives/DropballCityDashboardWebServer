@@ -1,5 +1,5 @@
 const Wallets = require("../models/Wallets"),
-  TransactionHistory = require("../models/TransactionHistory")
+  TransactionHistory = require("../models/TransactionHistory"),
   Users = require("../models/Users");
 
 
