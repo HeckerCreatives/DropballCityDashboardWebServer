@@ -6,15 +6,7 @@ const currencyHistorySchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        adminuser: {
-            type: String,
-            required: true
-        },
-        usertranferAmount:{
-            type: Number,
-            required: true
-        },
-        admintranferAmount:{
+        usertransferAmount:{
             type: Number,
             required: true
         }

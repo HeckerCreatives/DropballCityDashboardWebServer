@@ -14,7 +14,7 @@ const routers = app => {
   app.use("/mailer", require("./Mailer"));
   app.use("/requestsgame", require("./RequestsGame"));
   app.use("/limitRequest", require("./LimitRequests"));
-  app.use("/currencytransfer", require("./CurrencyTransfer"));
+  app.use("/currency", require("./CurrencyTransfer"));
   // app.use(middleware.notFound);
   // app.use(middleware.errorHandler);
 };
