@@ -16,9 +16,6 @@ exports.convertCurrency = async (request, response) => {
     const users = await Users.find({ username: [ currentUsername ] })
     const goldDetails = users.filter((i => i.username == currentUsername));
     
-
-    
-
     const currencyIC = "IC" //(initialcredit - amount)    
     const currencyDC = "DC" //(gamecredit - amount)    
 
