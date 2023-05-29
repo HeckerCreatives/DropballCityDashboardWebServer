@@ -29,13 +29,14 @@ exports.convert = async (req, res) => {
 }
 
 exports.convertgctoweb = async (req, res) => {
-  const {amount} = req.body
+  const {amount, user } = req.body
+
 
   const session = await Wallets.startSession();
   try {
     session.startTransaction();
-    const player = await Users.find({username: "Player"})
-    await Wallets.findOneAndUpdate({userId : player[0]._id}, {$inc: {amount: +amount}})
+    const player = await Users.find({username: user})
+    await Wallets.findOneAndUpdate({userId : player._id}, {$inc: {amount: +amount}})
       res.json({ response: "success" })
       await session.commitTransaction();
   } catch (error) {
