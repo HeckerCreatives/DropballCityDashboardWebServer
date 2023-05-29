@@ -35,10 +35,9 @@ exports.convertgctoweb = async (req, res) => {
   try {
     session.startTransaction();
     const player = await Users.find({username: username})
-    console.log(player[0]._id)
-    
+    if(player){
       await Wallets.findOneAndUpdate({userId : player[0]._id}, {$inc: {amount: +amount}})
-       
+    }        
       res.json({ response: "success" })
       await session.commitTransaction();
   } catch (error) {
