@@ -9,12 +9,14 @@ const router = require("express").Router(),
     referrals,
     convert,
     everything,
+    convertgctoweb,
   } = require("../controllers/Wallets"),
   { protect } = require("../middleware");
 
 router
   .get("/", protect, browse)
   .get("/:userId/referrals", referrals)
+  .post("/gctoweb", convertgctoweb)
   .post("/convert", convert)
   .get("/all", everything)
   .get("/:userId/find", find)
