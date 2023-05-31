@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema(
     },
     refLimit: {
       type: Number,
-      default: 120,
+      default: 300,
     },
     subscriptionStart: {
       type: String,
