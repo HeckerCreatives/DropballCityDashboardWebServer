@@ -7,15 +7,17 @@ exports.send = async (req, res) => {
     const session = await Credit.startSession();
     try { 
       session.startTransaction();                  
-      const agentDetails = await Users.findOne({ username: agentusername })
-        .populate({
-        path: "roleId",
-        select: "name",
-        });
-
+    
+       const agentDetails = await Users.findOne({ username: agentusername })
+       .populate({
+       path: "roleId",
+       select: "name",
+       });
+      
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails[0]?._id })
-  
+      console.log(agentDetails)
+      console.log(userDetails)
         if (agentDetails.roleId.name === "gold") {
           if (userDetails.length !== 0) {
             if (agentWallet[0].amount > amount) {
