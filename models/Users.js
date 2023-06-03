@@ -21,8 +21,7 @@ const userSchema = new mongoose.Schema(
       ref: "Roles",
     },
     playfabId: {
-      type: String,
-      required: true,
+      type: String
     },
     referrerId: {
       type: mongoose.Schema.Types.ObjectId,
