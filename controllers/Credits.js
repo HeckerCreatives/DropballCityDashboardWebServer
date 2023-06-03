@@ -21,7 +21,7 @@ exports.send = async (req, res) => {
             console.log("waw")
           if (userDetails.length !== 0) {
             console.log("wew")
-            if (agentWallet.amount > amount) {
+            if (agentWallet[0].amount > amount) {
                 console.log("wrw")
                 await Credit.create(req.body);
                 await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
@@ -36,8 +36,11 @@ exports.send = async (req, res) => {
           }
           
         } else if (agentDetails.roleId.name === "silver") {
+            console.log("wew")
             if (userDetails.length !== 0) {
-                if (agentWallet.amount > amount) {
+                console.log("waw")
+                if (agentWallet[0].amount > amount) {
+                    console.log("aarw")
                     await Credit.create(req.body);
                     await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
                     await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
