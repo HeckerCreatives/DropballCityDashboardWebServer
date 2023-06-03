@@ -17,17 +17,21 @@ exports.send = async (req, res) => {
       
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails._id })
-      
+      const sendhistory = {
+        senderusername: agentDetails,
+        receiverUsername: userDetails,
+        amount: amount
+      }
         if (agentDetails.roleId.name === "gold") {
             
           if (userDetails.length !== 0) {
             
-            if (agentWallet[0].amount > amount) {
+            if (agentWallet[0].amount > amount) {                
                 
-                await SendCredit.create(req.body);
                 await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
                 await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
-    
+                await SendCredit.create(sendhistory);
+
               await session.commitTransaction();
               res.json({ response: "success" })
             } else {
@@ -79,14 +83,18 @@ exports.claim = async (req, res) => {
       
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails._id })
-      console.log(agentWallet)
+      const claimhistory = {
+        senderusername: userDetails,
+        receiverUsername: agentDetails,
+        amount: amount
+      }
         if (agentDetails.roleId.name === "gold") {
             
           if (userDetails.length !== 0) {
             
             if (agentWallet[0].amount > amount) {
                 
-                await ClaimCredit.create(req.body);
+                await ClaimCredit.create(claimhistory);
                 await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
                 await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: -amount } });
     
