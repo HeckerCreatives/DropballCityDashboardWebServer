@@ -3,29 +3,23 @@ const Credit = require("../models/Credits"),
     Users = require("../models/Users");
 
 exports.send = async (req, res) => {
-    const { username, silverusername , goldusername, amount } = req.body
+    const { username, agentusername, amount } = req.body
     const session = await Credit.startSession();
     try { 
       session.startTransaction();                  
-      const users = await Users.find({ username: [ goldusername, username, silverusername ] })
-      const goldDetails = users.filter((i) => i.username == goldusername)
-      .populate({
-        path: "roleId",
-        select: "name",
-      })    
-      const silverDetails = users.filter((i) => i.username == silverusername)
+      const users = await Users.find({ username: [ agentusername, username ] })
+      const agentDetails = users.filter((i) => i.username == agentusername)
       .populate({
         path: "roleId",
         select: "name",
       })    
       const userDetails = users.filter((i) => i.username == username)  
-      const goldWallet = await Wallets.find({ "userId": goldDetails[0]?._id })
-      const silverWallet = await Wallets.find({ "userId": silverDetails[0]?._id })
+      const agentWallet = await Wallets.find({ "userId": agentDetails[0]?._id })
   
-        if (userDetails.length !== 0 && goldDetails.roleId.name === "gold") {
-          if (goldWallet[0].amount > amount) {
+        if (userDetails.length !== 0 && agentDetails.roleId.name === "gold") {
+          if (agentWallet[0].amount > amount) {
               await Credit.create(req.body);
-              await Wallets.findOneAndUpdate({ userId: goldDetails[0]._id}, { $inc: { amount: -amount } });
+              await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: -amount } });
               await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: +amount } });
   
             await session.commitTransaction();
@@ -34,10 +28,10 @@ exports.send = async (req, res) => {
              await  session.abortTransaction();
              res.json({ response: "failed" })
           }
-        } else if (userDetails.length !== 0 && silverDetails.roleId.name === "silver") {
-            if (silverWallet[0].amount > amount) {
+        } else if (userDetails.length !== 0 && agentDetails.roleId.name === "silver") {
+            if (agentWallet[0].amount > amount) {
                 await Credit.create(req.body);
-                await Wallets.findOneAndUpdate({ userId: silverDetails[0]._id}, { $inc: { amount: -amount } });
+                await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: -amount } });
                 await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: +amount } });
     
               await session.commitTransaction();
@@ -59,29 +53,23 @@ exports.send = async (req, res) => {
 }
 
 exports.claim = async (req, res) => {
-    const { username, silverusername , goldusername, amount } = req.body
+    const { username, agentusername, amount } = req.body
     const session = await Credit.startSession();
     try { 
       session.startTransaction();                  
-      const users = await Users.find({ username: [ goldusername, username, silverusername ] })
-      const goldDetails = users.filter((i) => i.username == goldusername)
-      .populate({
-        path: "roleId",
-        select: "name",
-      })    
-      const silverDetails = users.filter((i) => i.username == silverusername)
+      const users = await Users.find({ username: [ agentusername, username ] })
+      const agentDetails = users.filter((i) => i.username == agentusername)
       .populate({
         path: "roleId",
         select: "name",
       })    
       const userDetails = users.filter((i) => i.username == username)  
-      const goldWallet = await Wallets.find({ "userId": goldDetails[0]?._id })
-      const silverWallet = await Wallets.find({ "userId": silverDetails[0]?._id })
+      const agentWallet = await Wallets.find({ "userId": agentDetails[0]?._id })
   
-        if (userDetails.length !== 0 && goldDetails.roleId.name === "gold") {
-          if (goldWallet[0].amount > amount) {
+        if (userDetails.length !== 0 && agentDetails.roleId.name === "gold") {
+          if (agentWallet[0].amount > amount) {
               await Credit.create(req.body);
-              await Wallets.findOneAndUpdate({ userId: goldDetails[0]._id}, { $inc: { amount: +amount } });
+              await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: +amount } });
               await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: -amount } });
   
             await session.commitTransaction();
@@ -90,10 +78,10 @@ exports.claim = async (req, res) => {
              await  session.abortTransaction();
              res.json({ response: "failed" })
           }
-        } else if (userDetails.length !== 0 && silverDetails.roleId.name === "silver") {
-            if (silverWallet[0].amount > amount) {
+        } else if (userDetails.length !== 0 && agentDetails.roleId.name === "silver") {
+            if (agentWallet[0].amount > amount) {
                 await Credit.create(req.body);
-                await Wallets.findOneAndUpdate({ userId: silverDetails[0]._id}, { $inc: { amount: +amount } });
+                await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: +amount } });
                 await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: -amount } });
     
               await session.commitTransaction();
