@@ -16,19 +16,8 @@ exports.send = async (req, res) => {
       const userDetails = users.filter((i) => i.username == username)  
       const agentWallet = await Wallets.find({ "userId": agentDetails[0]?._id })
   
-        if (userDetails.length !== 0 && agentDetails.roleId.name === "gold") {
-          if (agentWallet[0].amount > amount) {
-              await Credit.create(req.body);
-              await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: -amount } });
-              await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: +amount } });
-  
-            await session.commitTransaction();
-            res.json({ response: "success" })
-          } else {
-             await  session.abortTransaction();
-             res.json({ response: "failed" })
-          }
-        } else if (userDetails.length !== 0 && agentDetails.roleId.name === "silver") {
+        if (agentDetails.roleId.name === "gold") {
+          if (userDetails.length !== 0) {
             if (agentWallet[0].amount > amount) {
                 await Credit.create(req.body);
                 await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: -amount } });
@@ -40,6 +29,22 @@ exports.send = async (req, res) => {
                await  session.abortTransaction();
                res.json({ response: "failed" })
             }
+          }
+          
+        } else if (agentDetails.roleId.name === "silver") {
+            if (userDetails.length !== 0) {
+                if (agentWallet[0].amount > amount) {
+                    await Credit.create(req.body);
+                    await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: -amount } });
+                    await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: +amount } });
+        
+                  await session.commitTransaction();
+                  res.json({ response: "success" })
+                } else {
+                   await  session.abortTransaction();
+                   res.json({ response: "failed" })
+                }
+            }            
         } else {
           await  session.abortTransaction();
           res.json({ response: "user does not exist" })
