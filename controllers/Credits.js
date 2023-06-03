@@ -15,7 +15,7 @@ exports.send = async (req, res) => {
        });
       
       const userDetails = await Users.findOne({ username: username })
-      const agentWallet = await Wallets.find({ "userId": agentDetails[0]?._id })
+      const agentWallet = await Wallets.find({ "userId": agentDetails._id })
       console.log(agentDetails)
       console.log(agentWallet)
         if (agentDetails.roleId.name === "gold") {
