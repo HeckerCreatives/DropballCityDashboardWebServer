@@ -1,10 +1,11 @@
-const Credit = require("../models/Credits"),
+const SendCredit = require("../models/SendCredits"),
+    ClaimCredit = require("../models/Claimcredits"),
     Wallets = require("../models/Wallets"),
     Users = require("../models/Users");
 
 exports.send = async (req, res) => {
     const { username, agentusername, amount } = req.body
-    const session = await Credit.startSession();
+    const session = await SendCredit.startSession();
     try { 
       session.startTransaction();                  
     
@@ -23,7 +24,7 @@ exports.send = async (req, res) => {
             
             if (agentWallet[0].amount > amount) {
                 
-                await Credit.create(req.body);
+                await SendCredit.create(req.body);
                 await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
                 await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
     
@@ -41,7 +42,7 @@ exports.send = async (req, res) => {
                 
                 if (agentWallet[0].amount > amount) {
                     
-                    await Credit.create(req.body);
+                    await SendCredit.create(req.body);
                     await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
                     await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
         
@@ -66,7 +67,7 @@ exports.send = async (req, res) => {
 
 exports.claim = async (req, res) => {
     const { username, agentusername, amount } = req.body
-    const session = await Credit.startSession();
+    const session = await ClaimCredit.startSession();
     try { 
       session.startTransaction();                  
     
@@ -85,7 +86,7 @@ exports.claim = async (req, res) => {
             
             if (agentWallet[0].amount > amount) {
                 
-                await Credit.create(req.body);
+                await ClaimCredit.create(req.body);
                 await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
                 await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: -amount } });
     
@@ -103,7 +104,7 @@ exports.claim = async (req, res) => {
                 
                 if (agentWallet[0].amount > amount) {
                     
-                    await Credit.create(req.body);
+                    await ClaimCredit.create(req.body);
                     await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
                     await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: -amount } });
         
