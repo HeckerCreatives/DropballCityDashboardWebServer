@@ -16,13 +16,13 @@ exports.send = async (req, res) => {
       
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails._id })
-      console.log(agentWallet)
+      
         if (agentDetails.roleId.name === "gold") {
-            console.log("waw")
+            
           if (userDetails.length !== 0) {
-            console.log("wew")
+            
             if (agentWallet[0].amount > amount) {
-                console.log("wrw")
+                
                 await Credit.create(req.body);
                 await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
                 await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
@@ -36,11 +36,11 @@ exports.send = async (req, res) => {
           }
           
         } else if (agentDetails.roleId.name === "silver") {
-            console.log("wew")
+            
             if (userDetails.length !== 0) {
-                console.log("waw")
+                
                 if (agentWallet[0].amount > amount) {
-                    console.log("aarw")
+                    
                     await Credit.create(req.body);
                     await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
                     await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
@@ -69,32 +69,25 @@ exports.claim = async (req, res) => {
     const session = await Credit.startSession();
     try { 
       session.startTransaction();                  
-      const users = await Users.find({ username: [ agentusername, username ] })
-      const agentDetails = users.filter((i) => i.username == agentusername)
-      .populate({
-        path: "roleId",
-        select: "name",
-      })    
-      const userDetails = users.filter((i) => i.username == username)  
-      const agentWallet = await Wallets.find({ "userId": agentDetails[0]?._id })
-  
-        if (userDetails.length !== 0 && agentDetails.roleId.name === "gold") {
-          if (agentWallet[0].amount > amount) {
-              await Credit.create(req.body);
-              await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: +amount } });
-              await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: -amount } });
-  
-            await session.commitTransaction();
-            res.json({ response: "success" })
-          } else {
-             await  session.abortTransaction();
-             res.json({ response: "failed" })
-          }
-        } else if (userDetails.length !== 0 && agentDetails.roleId.name === "silver") {
+    
+       const agentDetails = await Users.findOne({ username: agentusername })
+       .populate({
+       path: "roleId",
+       select: "name",
+       });
+      
+      const userDetails = await Users.findOne({ username: username })
+      const agentWallet = await Wallets.find({ "userId": agentDetails._id })
+      console.log(agentWallet)
+        if (agentDetails.roleId.name === "gold") {
+            
+          if (userDetails.length !== 0) {
+            
             if (agentWallet[0].amount > amount) {
+                
                 await Credit.create(req.body);
-                await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: +amount } });
-                await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: -amount } });
+                await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
+                await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: -amount } });
     
               await session.commitTransaction();
               res.json({ response: "success" })
@@ -102,6 +95,25 @@ exports.claim = async (req, res) => {
                await  session.abortTransaction();
                res.json({ response: "failed" })
             }
+          }
+          
+        } else if (agentDetails.roleId.name === "silver") {
+            
+            if (userDetails.length !== 0) {
+                
+                if (agentWallet[0].amount > amount) {
+                    
+                    await Credit.create(req.body);
+                    await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
+                    await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: -amount } });
+        
+                  await session.commitTransaction();
+                  res.json({ response: "success" })
+                } else {
+                   await  session.abortTransaction();
+                   res.json({ response: "failed" })
+                }
+            }            
         } else {
           await  session.abortTransaction();
           res.json({ response: "user does not exist" })
