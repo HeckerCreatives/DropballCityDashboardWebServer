@@ -17,10 +17,13 @@ exports.send = async (req, res) => {
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails[0]?._id })
       console.log(agentDetails)
-      console.log(userDetails)
+      console.log(agentWallet)
         if (agentDetails.roleId.name === "gold") {
+            console.log("waw")
           if (userDetails.length !== 0) {
+            console.log("wew")
             if (agentWallet[0].amount > amount) {
+                console.log("wrw")
                 await Credit.create(req.body);
                 await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: -amount } });
                 await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: +amount } });
