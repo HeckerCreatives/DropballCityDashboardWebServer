@@ -16,17 +16,15 @@ exports.send = async (req, res) => {
       
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails._id })
-      console.log(agentDetails)
-      console.log(agentWallet)
         if (agentDetails.roleId.name === "gold") {
             console.log("waw")
           if (userDetails.length !== 0) {
             console.log("wew")
-            if (agentWallet[0].amount > amount) {
+            if (agentWallet.amount > amount) {
                 console.log("wrw")
                 await Credit.create(req.body);
-                await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: -amount } });
-                await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: +amount } });
+                await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
+                await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
     
               await session.commitTransaction();
               res.json({ response: "success" })
@@ -38,10 +36,10 @@ exports.send = async (req, res) => {
           
         } else if (agentDetails.roleId.name === "silver") {
             if (userDetails.length !== 0) {
-                if (agentWallet[0].amount > amount) {
+                if (agentWallet.amount > amount) {
                     await Credit.create(req.body);
-                    await Wallets.findOneAndUpdate({ userId: agentDetails[0]._id}, { $inc: { amount: -amount } });
-                    await Wallets.findOneAndUpdate({ userId: userDetails[0]._id }, { $inc: { amount: +amount } });
+                    await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
+                    await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
         
                   await session.commitTransaction();
                   res.json({ response: "success" })
