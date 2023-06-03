@@ -3,7 +3,7 @@ const router = require("express").Router(),
   { protect } = require("../middleware");
 
 router
-  .post("/send",  send)
-  .post("/claim",  claim)
+  .post("/send", send)
+  .post("/claim", claim)
 
 module.exports = router;
