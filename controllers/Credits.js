@@ -18,7 +18,7 @@ exports.send = async (req, res) => {
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails._id })
       const sendhistory = {
-        senderusername: agentDetails,
+        senderUsername: agentDetails,
         receiverUsername: userDetails,
         amount: amount
       }
@@ -84,7 +84,7 @@ exports.claim = async (req, res) => {
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails._id })
       const claimhistory = {
-        senderusername: userDetails,
+        senderUsername: userDetails,
         receiverUsername: agentDetails,
         amount: amount
       }
