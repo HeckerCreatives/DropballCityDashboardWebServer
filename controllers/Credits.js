@@ -7,12 +7,11 @@ exports.send = async (req, res) => {
     const session = await Credit.startSession();
     try { 
       session.startTransaction();                  
-      const users = await Users.find({ username: [ agentusername, username ] })
-      const agentDetails = users.filter((i) => i.username == agentusername)
-      .populate({
+      const users = await Users.find({ username: [ agentusername, username ] }).populate({
         path: "roleId",
         select: "name",
-      })    
+      })
+      const agentDetails = users.filter((i) => i.username == agentusername)    
       const userDetails = users.filter((i) => i.username == username)  
       const agentWallet = await Wallets.find({ "userId": agentDetails[0]?._id })
   
