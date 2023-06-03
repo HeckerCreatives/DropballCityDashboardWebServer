@@ -16,6 +16,7 @@ exports.send = async (req, res) => {
       
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails._id })
+      console.log(agentWallet)
         if (agentDetails.roleId.name === "gold") {
             console.log("waw")
           if (userDetails.length !== 0) {
