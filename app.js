@@ -15,7 +15,8 @@ mongoose.connect(process.env.ATLAS_URI, {
 
 const corsConfig = {
   // origin: "http://localhost:3000",
-  origin: ["https://testdbcdashboard.onrender.com/","https://testdbcdashboard.onrender.com",],
+  // origin: ["https://testdbcdashboard.onrender.com/","https://testdbcdashboard.onrender.com",],
+  origin: ["https://dashboard.dropballcity.games", "https://dashboard.dropballcity.games/", "https://dropballcity.games/", "https://dropballcity.games"],
   methods: ["GET", "POST", "PUT", "DELETE"], // List only` available methods
   credentials: true, // Must be set to true
   allowedHeaders: [
