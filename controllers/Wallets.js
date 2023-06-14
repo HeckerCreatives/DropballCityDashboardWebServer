@@ -1,5 +1,6 @@
 const Wallets = require("../models/Wallets"),
   TransactionHistory = require("../models/TransactionHistory"),
+  GCGametoWebHistory = require("../models/CreditBalancehistory.js")
   Users = require("../models/Users");
 
 
@@ -10,7 +11,7 @@ exports.convert = async (req, res) => {
      const session = await Wallets.startSession();
       try {
         session.startTransaction();           
-         const admin = await Users.find({username: "Admin"})       
+         const admin = await Users.find({username: "dropballcityadmin"})       
           if (type === "commission") {
               await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { initial: +amount, commission: -amount}})
           } else if (type === "tong") {
@@ -37,6 +38,11 @@ exports.convertgctoweb = async (req, res) => {
     const player = await Users.find({username: username})
     if(player){
       await Wallets.findOneAndUpdate({userId : player[0]._id}, {$inc: {amount: +amount}})
+      const gcgametowebhistory = {
+        user: username,
+        usertransferAmount: amount,
+      }
+      await GCGametoWebHistory.create(gcgametowebhistory)
     }        
       res.json({ response: "success" })
       await session.commitTransaction();
@@ -110,6 +116,16 @@ exports.browse = (req, res) =>
     })
     .then(items => res.json(items.filter(item => !item.deletedAt)))
     .catch(error => res.status(400).json({ error: error.message }));
+
+exports.gcgametoweb = (req, res) =>
+  GCGametoWebHistory.find()
+    .then(items => res.json(items))
+    .catch(error => res.status(400).json({ error: error.message }));
+
+exports.commissionhistory = (req, res) =>
+    TransactionHistory.find()
+      .then(items => res.json(items))
+      .catch(error => res.status(400).json({ error: error.message }));    
 
 // entity/
 // module.exports.browse = (req, res) =>

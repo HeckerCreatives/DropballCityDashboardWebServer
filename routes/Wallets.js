@@ -10,6 +10,8 @@ const router = require("express").Router(),
     convert,
     everything,
     convertgctoweb,
+    gcgametoweb,
+    commissionhistory,
   } = require("../controllers/Wallets"),
   { protect } = require("../middleware");
 
@@ -17,6 +19,8 @@ router
   .get("/", protect, browse)
   .get("/:userId/referrals", referrals)
   .post("/gctoweb", convertgctoweb)
+  .get("/gctowebhistory", gcgametoweb)
+  .get("/commissionhistory", commissionhistory)
   .post("/convert", convert)
   .get("/all", everything)
   .get("/:userId/find", find)

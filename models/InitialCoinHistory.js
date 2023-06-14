@@ -1,7 +1,7 @@
-// This is for Game credit to game history (All users except Admin)
+// This is for Initial Credit from Web to Game (Admin only)
 const mongoose = require("mongoose");
 
-const currencyHistorySchema = new mongoose.Schema(
+const initialCoinHistorySchema = new mongoose.Schema(
     {
         user: {
             type: String,
@@ -17,6 +17,6 @@ const currencyHistorySchema = new mongoose.Schema(
     }
 )
 
-const CurrencyTransferHistory = mongoose.model("CurrencyTransferHistory", currencyHistorySchema)
+const InitialCoinHistory = mongoose.model("InitialCoinHistory", initialCoinHistorySchema)
 
-module.exports = CurrencyTransferHistory;
+module.exports = InitialCoinHistory;

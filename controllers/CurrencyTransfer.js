@@ -1,5 +1,6 @@
 const Currency = require("../models/CurrencyTransfer"),
     CurrencyTransferHistory = require("../models/CurrencyTransferHistory"),
+    InitialCoinHistory = require("../models/InitialCoinHistory"),
     Wallets = require("../models/Wallets"),
     Users = require("../models/Users");
 
@@ -26,19 +27,21 @@ exports.convertCurrency = async (request, response) => {
 
         if(currency === currencyIC){
             await Wallets.findOneAndUpdate({userId: currentuser[0]._id}, {$inc: { initial: -amount}})
+            const initialcoinhistory = {
+                user: currentUsername,
+                usertransferAmount: amount,
+            }            
+            await InitialCoinHistory.create(initialcoinhistory)
         } else if (currency === currencyDC){
             await Wallets.findOneAndUpdate({userId: currentuser[0]._id}, {$inc: { amount: -amount }})
+            const currencytransactionhistory = {
+                user: currentUsername,
+                usertransferAmount: amount,
+            }            
+            await CurrencyTransferHistory.create(currencytransactionhistory)
         } else {
             return "failed"
-        }
-
-        const currencytransactionhistory = {
-            user: currentUsername,
-            usertransferAmount: amount,
-        }
-        
-        await CurrencyTransferHistory.create(currencytransactionhistory)
-
+        }       
 
         response.json({response: "success"})
         await session.commitTransaction();
@@ -49,3 +52,13 @@ exports.convertCurrency = async (request, response) => {
     session.endSession();
     
 }
+
+exports.browsedc = (req, res) =>
+  CurrencyTransferHistory.find()
+    .then(items => res.json(items))
+    .catch(error => res.status(400).json({ error: error.message }));
+
+exports.browseic = (req, res) =>
+    InitialCoinHistory.find()
+      .then(items => res.json(items))
+      .catch(error => res.status(400).json({ error: error.message }));

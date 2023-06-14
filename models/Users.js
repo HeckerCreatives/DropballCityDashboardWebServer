@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
     },
     playfabId: {
       type: String,
-      required: true,
+      // required: true,
     },
     referrerId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -66,6 +66,10 @@ const userSchema = new mongoose.Schema(
     },
     deletedAt: {
       type: String,
+    },
+    isApproved: {
+      type: Boolean,
+      default: false,
     },
   },
   {

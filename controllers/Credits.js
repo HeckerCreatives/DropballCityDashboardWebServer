@@ -17,6 +17,7 @@ exports.send = async (req, res) => {
       
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails._id })
+
       const sendhistory = {
         senderUsername: agentDetails,
         receiverUsername: userDetails,
@@ -46,7 +47,7 @@ exports.send = async (req, res) => {
                 
                 if (agentWallet[0].amount > amount) {
                     
-                    await SendCredit.create(req.body);
+                    await SendCredit.create(sendhistory);
                     await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
                     await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
         
@@ -57,7 +58,26 @@ exports.send = async (req, res) => {
                    res.json({ response: "failed" })
                 }
             }            
-        } else {
+        } else if (agentDetails.roleId.name === "admin") {
+            
+          if (userDetails.length !== 0) {
+              
+              if (agentWallet[0].amount > amount) {
+                  
+                  await SendCredit.create(sendhistory);
+                  await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
+                  await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
+      
+                await session.commitTransaction();
+                res.json({ response: "success" })
+              } else {
+                 await  session.abortTransaction();
+                 res.json({ response: "failed" })
+              }
+          }            
+      }
+        
+        else {
           await  session.abortTransaction();
           res.json({ response: "user does not exist" })
         }
@@ -112,7 +132,7 @@ exports.claim = async (req, res) => {
                 
                 if (agentWallet[0].amount > amount) {
                     
-                    await ClaimCredit.create(req.body);
+                    await ClaimCredit.create(claimhistory);
                     await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
                     await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: -amount } });
         
@@ -123,7 +143,26 @@ exports.claim = async (req, res) => {
                    res.json({ response: "failed" })
                 }
             }            
-        } else {
+        } else if (agentDetails.roleId.name === "admin") {
+            
+          if (userDetails.length !== 0) {
+              
+              if (agentWallet[0].amount > amount) {
+                  
+                  await ClaimCredit.create(claimhistory);
+                  await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
+                  await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: -amount } });
+      
+                await session.commitTransaction();
+                res.json({ response: "success" })
+              } else {
+                 await  session.abortTransaction();
+                 res.json({ response: "failed" })
+              }
+          }            
+      } 
+        
+        else {
           await  session.abortTransaction();
           res.json({ response: "user does not exist" })
         }
@@ -134,3 +173,87 @@ exports.claim = async (req, res) => {
     } 
      session.endSession();
 }
+
+exports.browsesend = (req, res) =>
+  SendCredit.find()
+    .populate({
+      path: "receiverUsername",
+      select: "username",
+    })
+    .populate({
+      path: "senderUsername",
+      select: "username",
+    })
+    .then(items => res.json(items))
+    .catch(error => res.status(400).json({ error: error.message }));
+
+exports.browseclaim = (req, res) =>
+  ClaimCredit.find()
+    .populate({
+      path: "receiverUsername",
+      select: "username",
+    })
+    .populate({
+      path: "senderUsername",
+      select: "username",
+    })
+    .then(items => res.json(items))
+    .catch(error => res.status(400).json({ error: error.message }));
+
+exports.findsendto = (req, res) =>
+    SendCredit.find()
+      .byTo(req.query.key)
+      .populate({
+        path: "receiverUsername",
+        select: "username",
+      })
+      .populate({
+        path: "senderUsername",
+        select: "username",
+      })
+      .then(items => res.json(items))
+      .catch(error => res.status(400).json({ error: error.message }));
+  
+  // entity/:userId/find
+exports.findsendfrom = (req, res) =>
+    SendCredit.find()
+      .byFrom(req.params.userId)
+      .populate({
+        path: "receiverUsername",
+        select: "username",
+      })
+      .populate({
+        path: "senderUsername",
+        select: "username",
+      })
+      .then(items => res.json(items))
+      .catch(error => res.status(400).json({ error: error.message }));
+
+exports.findclaimto = (req, res) =>
+  ClaimCredit.find()
+    .byTo(req.query.key)
+    .populate({
+      path: "receiverUsername",
+      select: "username",
+    })
+    .populate({
+      path: "senderUsername",
+      select: "username",
+    })
+    .then(items => res.json(items))
+    .catch(error => res.status(400).json({ error: error.message }));
+    
+    // entity/:userId/find
+exports.findclaimfrom = (req, res) =>
+  ClaimCredit.find()
+    .byFrom(req.params.userId)
+    .populate({
+      path: "receiverUsername",
+      select: "username",
+    })
+    .populate({
+      path: "senderUsername",
+      select: "username",
+    })
+    .then(items => res.json(items))
+    .catch(error => res.status(400).json({ error: error.message }));      

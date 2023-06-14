@@ -18,6 +18,13 @@ const claimCreditSchema = new mongoose.Schema(
         timestamps: true
     }
 )
+claimCreditSchema.query.byFrom = function (senderUsername) {
+  return this.where({ senderUsername });
+};
+
+claimCreditSchema.query.byTo = function (receiverUsername) {
+  return this.where({ receiverUsername });
+};
 
 const ClaimCredit = mongoose.model("Credit", claimCreditSchema)
 

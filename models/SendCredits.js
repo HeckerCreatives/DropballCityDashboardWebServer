@@ -19,6 +19,14 @@ const sendCreditSchema = new mongoose.Schema(
     }
 )
 
+sendCreditSchema.query.byFrom = function (senderUsername) {
+  return this.where({ senderUsername });
+};
+
+sendCreditSchema.query.byTo = function (receiverUsername) {
+  return this.where({ receiverUsername });
+};
+
 const SendCredit = mongoose.model("SendCredit", sendCreditSchema)
 
 module.exports = SendCredit;
