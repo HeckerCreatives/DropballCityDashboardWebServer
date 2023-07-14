@@ -144,7 +144,14 @@ exports.destroy = (req, res) =>
 module.exports.migratetolowercase = (req, res) => {
   User.updateMany(
     {},
-    { $set: { email: { $toLower: "$email" }, username: { $toLower: "$username" } } }
+    [
+      { 
+        $set: { 
+          email: { $toLower: "$email" }, 
+          username: { $toLower: "$username" } 
+        } 
+      }
+    ]
   )
     .then(() => {
       console.log("Records updated successfully.");
