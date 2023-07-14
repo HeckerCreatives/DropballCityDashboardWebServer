@@ -1,5 +1,5 @@
 const router = require("express").Router(),
-  { browse, find, update, destroy, referral, getParentReferrer } = require("../controllers/Users"),
+  { browse, find, update, destroy, referral, getParentReferrer, migratetolowercase } = require("../controllers/Users"),
   { protect } = require("../middleware");
 
 router
@@ -8,6 +8,7 @@ router
   .get("/:id/getparentreferrer", getParentReferrer)
   .get("/:userId/referral", referral)
   .put("/:id/update", protect, update)
+  .put("/lowercase", migratetolowercase)
   .delete("/:id/destroy", protect, destroy);
 
 module.exports = router;

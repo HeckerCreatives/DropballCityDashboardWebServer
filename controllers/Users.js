@@ -139,3 +139,21 @@ exports.destroy = (req, res) =>
   })
     .then(() => res.json(`${req.params.id} deleted successfully`))
     .catch(error => res.status(400).json({ error: error.message }));
+
+
+module.exports.migratetolowercase = (req, res) => {
+  User.updateMany(
+    {},
+    { $set: { email: { $toLower: "$email" }, username: { $toLower: "$username" } } }
+  )
+    .then(() => {
+      console.log("Records updated successfully.");
+      // Continue with other operations or close the database connection
+      res.json({ message: "Records updated successfully." });
+    })
+    .catch(error => {
+      console.error("Error updating records:", error);
+      // Handle the error
+      res.status(500).json({ error: "An error occurred while updating records." });
+    });
+};
