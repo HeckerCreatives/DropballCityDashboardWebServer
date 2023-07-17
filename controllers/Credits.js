@@ -23,7 +23,7 @@ exports.send = async (req, res) => {
         receiverUsername: userDetails,
         amount: amount
       }
-        if (agentDetails.roleId.name === "gold") {
+        if (agentDetails.roleId.name === "admin") {
             
           if (userDetails.length !== 0) {
             
@@ -58,7 +58,7 @@ exports.send = async (req, res) => {
                    res.json({ response: "failed" })
                 }
             }            
-        } else if (agentDetails.roleId.name === "admin") {
+        } else if (agentDetails.roleId.name === "gold") {
             
           if (userDetails.length !== 0) {
               
@@ -108,7 +108,7 @@ exports.claim = async (req, res) => {
         receiverUsername: agentDetails,
         amount: amount
       }
-        if (agentDetails.roleId.name === "gold") {
+        if (agentDetails.roleId.name === "admin") {
             
           if (userDetails.length !== 0) {
             
@@ -143,7 +143,7 @@ exports.claim = async (req, res) => {
                    res.json({ response: "failed" })
                 }
             }            
-        } else if (agentDetails.roleId.name === "admin") {
+        } else if (agentDetails.roleId.name === "gold") {
             
           if (userDetails.length !== 0) {
               
