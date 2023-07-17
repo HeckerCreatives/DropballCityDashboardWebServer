@@ -103,6 +103,8 @@ exports.claim = async (req, res) => {
       
       const userDetails = await Users.findOne({ username: username })
       const agentWallet = await Wallets.find({ "userId": agentDetails._id })
+      const userWallet = await Wallets.find({ "userId": userDetails._id })
+
       const claimhistory = {
         senderUsername: userDetails,
         receiverUsername: agentDetails,
@@ -147,7 +149,7 @@ exports.claim = async (req, res) => {
             
           if (userDetails.length !== 0) {
               
-              if (agentWallet[0].amount > amount) {
+              if (userWallet[0].amount >= amount) {
                   
                   await ClaimCredit.create(claimhistory);
                   await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
