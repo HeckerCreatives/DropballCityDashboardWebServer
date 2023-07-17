@@ -27,7 +27,7 @@ exports.send = async (req, res) => {
             
           if (userDetails.length !== 0) {
             
-            if (agentWallet[0].amount > amount) {                
+            if (agentWallet[0].amount >= amount) {                
                 
                 await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
                 await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
@@ -45,7 +45,7 @@ exports.send = async (req, res) => {
             
             if (userDetails.length !== 0) {
                 
-                if (agentWallet[0].amount > amount) {
+                if (agentWallet[0].amount >= amount) {
                     
                     await SendCredit.create(sendhistory);
                     await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
@@ -62,7 +62,7 @@ exports.send = async (req, res) => {
             
           if (userDetails.length !== 0) {
               
-              if (agentWallet[0].amount > amount) {
+              if (agentWallet[0].amount >= amount) {
                   
                   await SendCredit.create(sendhistory);
                   await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
@@ -114,7 +114,7 @@ exports.claim = async (req, res) => {
             
           if (userDetails.length !== 0) {
             
-            if (agentWallet[0].amount > amount) {
+            if (userWallet[0].amount >= amount) {
                 
                 await ClaimCredit.create(claimhistory);
                 await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
@@ -132,7 +132,7 @@ exports.claim = async (req, res) => {
             
             if (userDetails.length !== 0) {
                 
-                if (agentWallet[0].amount > amount) {
+                if (userWallet[0].amount >= amount) {
                     
                     await ClaimCredit.create(claimhistory);
                     await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
