@@ -1,9 +1,10 @@
 const router = require("express").Router(),
-  { browse, find, update, destroy, referral, getParentReferrer, migratetolowercase } = require("../controllers/Users"),
+  { browse, find, update, destroy, referral, getParentReferrer, migratetolowercase, emailcheck } = require("../controllers/Users"),
   { protect } = require("../middleware");
 
 router
   .get("/", protect, browse)
+  .get("/emailchecker", emailcheck)
   .get("/:id/find", find)
   .get("/:id/getparentreferrer", getParentReferrer)
   .get("/:userId/referral", referral)

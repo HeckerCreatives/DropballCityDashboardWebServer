@@ -164,3 +164,17 @@ module.exports.migratetolowercase = (req, res) => {
       res.status(500).json({ error: "An error occurred while updating records." });
     });
 };
+
+exports.emailcheck = (req, res) => {
+  const {email} = req.body
+  User.find({email: email})    
+    .then(users => {
+      if(users){
+        res.json(users)
+      } else {
+        return null;
+      }
+    })
+    .catch(error => res.status(400).json({ error: error.message }));
+}
+  
