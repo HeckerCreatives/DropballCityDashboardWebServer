@@ -169,7 +169,7 @@ exports.emailcheck = (req, res) => {
   const {email} = req.body
   User.find({email: email})    
     .then(users => {
-      if(users){
+      if(!users === null){
         res.json(`user found`)
       } else {
         res.json(`user not found`)
