@@ -170,9 +170,9 @@ exports.emailcheck = (req, res) => {
   User.find({email: email})    
     .then(users => {
       if(users){
-        res.json(users)
+        res.json(`user found`)
       } else {
-        return null;
+        res.json(`user not found`)
       }
     })
     .catch(error => res.status(400).json({ error: error.message }));
