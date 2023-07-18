@@ -4,7 +4,7 @@ const router = require("express").Router(),
 
 router
   .get("/", protect, browse)
-  .get("/emailchecker", emailcheck)
+  .post("/emailchecker", emailcheck)
   .get("/:id/find", find)
   .get("/:id/getparentreferrer", getParentReferrer)
   .get("/:userId/referral", referral)
