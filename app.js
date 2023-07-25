@@ -64,18 +64,18 @@ app.get("*", (req, res) =>
 let revokedTokens = {};
 const { protect }= require('./middleware')
 
-// const checkRevokedToken = (req, res, next) => {
-//   const token = req.headers.authorization.split(' ')[1];
-//   try {
-//     if (revokedTokens[token]) {
-//       return res.status(401).json({ message: revokedTokens[token] });
-//     }
-//     next();
-//   } catch (error) {
-//     res.json(error)
-//   }
+const checkRevokedToken = (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1];
+  try {
+    if (revokedTokens[token]) {
+      return res.status(401).json({ message: revokedTokens[token] });
+    }
+    next();
+  } catch (error) {
+    res.json(error)
+  }
   
-// };
+};
 
 app.post('/autologout', (req, res) => {
   const event = req.body.event;
@@ -109,17 +109,9 @@ app.post('/autologout', (req, res) => {
   res.sendStatus(200)
 })
 
-app.post('/protected', protect, (req, res, next) => {
+app.get('/protected', protect ,checkRevokedToken , (req, res) => {
   // ...
-  const token = req.headers.authorization.split(' ')[1];
-  try {
-    if (revokedTokens[token]) {
-      return res.status(401).json({ message: revokedTokens[token] });
-    }
-    next();
-  } catch (error) {
-    res.json(error)
-  }
+  
 });
 
 const port = process.env.PORT || 5000; // Dynamic port for deployment
