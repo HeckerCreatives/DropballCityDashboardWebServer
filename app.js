@@ -76,7 +76,7 @@ const checkRevokedToken = (req, res, next) => {
   }
   
 };
-
+console.log(revokedTokens)
 app.post('/autologout', (req, res) => {
   const event = req.body.event;
   const user = req.body.user;
@@ -109,7 +109,7 @@ app.post('/autologout', (req, res) => {
   res.sendStatus(200)
 })
 
-app.get('/protected', protect ,checkRevokedToken , (req, res) => {
+app.get('/protected', checkRevokedToken, (req, res) => {
   // ...
   
 });
