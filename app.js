@@ -61,5 +61,51 @@ app.get("*", (req, res) =>
   res.sendFile(path.resolve(__dirname, "./", "client", "build", "index.html"))
 );
 
+let revokedTokens = {};
+
+const checkRevokedToken = (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1];
+  if (revokedTokens[token]) {
+    return res.status(401).json({ message: revokedTokens[token] });
+  }
+  next();
+};
+
+app.post('/autologout', (req, res) => {
+  const event = req.body.event;
+  const user = req.body.user;
+
+  let message;
+  switch (event) {
+    case 'ban':
+      // Ban the user
+      // ...
+      // Set the message to return to the user
+      message = 'You have been banned';
+      break;
+    case 'promote':
+      // Promote the user
+      // ...
+      // Set the message to return to the user
+      message = 'You have been promoted';
+      break;
+    case 'demote':
+      // Demote the user
+      // ...
+      // Set the message to return to the user
+      message = 'You have been demoted';
+      break;
+  }
+
+  // Revoke the user's token and associate it with a message
+  revokedTokens[user.token] = message;
+
+  res.sendStatus(200)
+})
+
+app.get('/protected', checkRevokedToken, (req, res) => {
+  // ...
+});
+
 const port = process.env.PORT || 5000; // Dynamic port for deployment
 server.listen(port, () => console.log(`Server is running on port: ${port}`));
