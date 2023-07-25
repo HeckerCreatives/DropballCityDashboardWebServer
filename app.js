@@ -103,7 +103,7 @@ app.post('/autologout', (req, res) => {
   res.sendStatus(200)
 })
 
-app.get('/protected', checkRevokedToken, (req, res) => {
+app.post('/protected', checkRevokedToken, (req, res) => {
   // ...
 });
 
