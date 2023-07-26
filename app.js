@@ -61,25 +61,29 @@ app.get("*", (req, res) =>
   res.sendFile(path.resolve(__dirname, "./", "client", "build", "index.html"))
 );
 
-let revokedTokens = {};
-const { protect }= require('./middleware')
 
-const checkRevokedToken = (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1];
-  try {
-    if (revokedTokens[token]) {
-      return res.status(401).json({ message: revokedTokens[token] });
-    }
-    next();
-  } catch (error) {
-    res.json(error)
-  }
-  
-};
-console.log(revokedTokens)
 app.post('/autologout', (req, res) => {
   const event = req.body.event;
-  const user = req.body.user;
+  const userId = req.body.userId;
+
+  const isUserLoggedIn = (userId) => {
+    // Check if the user is logged in by checking their session or token
+    // This will depend on how you are managing user sessions on your website
+    // Return true if the user is logged in, false otherwise
+  }
+
+  // Function to log out a user
+  const logoutUser = (userId) => {
+    // Log out the user by destroying their session or invalidating their token
+    
+    // This will depend on how you are managing user sessions on your website
+  }
+
+  // Check if the user is currently logged in
+  if (isUserLoggedIn(userId)) {
+    // If the user is logged in, log them out
+    logoutUser(userId);
+  }
 
   let message;
   switch (event) {
@@ -104,15 +108,11 @@ app.post('/autologout', (req, res) => {
   }
 
   // Revoke the user's token and associate it with a message
-  revokedTokens[user.token] = message;
+  revokedTokens[userId] = message;
 
   res.sendStatus(200)
 })
 
-app.get('/protected', checkRevokedToken, (req, res) => {
-  // ...
-  
-});
 
 const port = process.env.PORT || 5000; // Dynamic port for deployment
 server.listen(port, () => console.log(`Server is running on port: ${port}`));
