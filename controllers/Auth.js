@@ -26,7 +26,8 @@ exports.login = (req, res) => {
             });
           userData.token = generateToken(userData._id);
           res.json(userData);
-          res.cookie('jwt', userData.token, { httpOnly: true });
+          // res.cookie('jwt', userData.token, { httpOnly: true });
+          console.log(userData.token)
         }
       } else {
         res.json({ error: "E-mail and Password does not match." });
