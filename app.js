@@ -62,56 +62,56 @@ app.get("*", (req, res) =>
 );
 
 
-app.post('/autologout', (req, res) => {
-  const event = req.body.event;
-  const userId = req.body.userId;
+// app.post('/autologout', (req, res) => {
+//   const event = req.body.event;
+//   const userId = req.body.userId;
 
-  const isUserLoggedIn = (userId) => {
-    // Check if the user is logged in by checking their session or token
-    // This will depend on how you are managing user sessions on your website
-    // Return true if the user is logged in, false otherwise
-  }
+//   const isUserLoggedIn = (userId) => {
+//     // Check if the user is logged in by checking their session or token
+//     // This will depend on how you are managing user sessions on your website
+//     // Return true if the user is logged in, false otherwise
+//   }
 
-  // Function to log out a user
-  const logoutUser = (userId) => {
-    // Log out the user by destroying their session or invalidating their token
-    
-    // This will depend on how you are managing user sessions on your website
-  }
+//   // Function to log out a user
+//   const logoutUser = (userId) => {
+//     // Log out the user by destroying their session or invalidating their token
 
-  // Check if the user is currently logged in
-  if (isUserLoggedIn(userId)) {
-    // If the user is logged in, log them out
-    logoutUser(userId);
-  }
+//     // This will depend on how you are managing user sessions on your website
+//   }
 
-  let message;
-  switch (event) {
-    case 'ban':
-      // Ban the user
-      // ...
-      // Set the message to return to the user
-      message = 'You have been banned';
-      break;
-    case 'promote':
-      // Promote the user
-      // ...
-      // Set the message to return to the user
-      message = 'You have been promoted';
-      break;
-    case 'demote':
-      // Demote the user
-      // ...
-      // Set the message to return to the user
-      message = 'You have been demoted';
-      break;
-  }
+//   // Check if the user is currently logged in
+//   if (isUserLoggedIn(userId)) {
+//     // If the user is logged in, log them out
+//     logoutUser(userId);
+//   }
 
-  // Revoke the user's token and associate it with a message
-  revokedTokens[userId] = message;
+//   let message;
+//   switch (event) {
+//     case 'ban':
+//       // Ban the user
+//       // ...
+//       // Set the message to return to the user
+//       message = 'You have been banned';
+//       break;
+//     case 'promote':
+//       // Promote the user
+//       // ...
+//       // Set the message to return to the user
+//       message = 'You have been promoted';
+//       break;
+//     case 'demote':
+//       // Demote the user
+//       // ...
+//       // Set the message to return to the user
+//       message = 'You have been demoted';
+//       break;
+//   }
 
-  res.sendStatus(200)
-})
+//   // Revoke the user's token and associate it with a message
+//   revokedTokens[userId] = message;
+
+//   res.sendStatus(200)
+// })
 
 
 const port = process.env.PORT || 5000; // Dynamic port for deployment
