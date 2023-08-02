@@ -18,9 +18,9 @@ const router = require("express").Router(),
 router
   .get("/", protect, browse)
   .get("/:userId/referrals", referrals)
-  .post("/gctoweb", convertgctoweb)
-  .get("/gctowebhistory", gcgametoweb)
-  .get("/commissionhistory", commissionhistory)
+  .post("/gctoweb", protect, convertgctoweb)
+  .get("/gctowebhistory", protect, gcgametoweb)
+  .get("/commissionhistory", protect, commissionhistory)
   .post("/convert", convert)
   .get("/all", everything)
   .get("/:userId/find", find)

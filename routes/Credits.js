@@ -3,13 +3,13 @@ const router = require("express").Router(),
   { protect } = require("../middleware");
 
 router
-  .get("/:userId/findclaimfrom", findclaimfrom)
-  .get("/findclaimto", findclaimto)
-  .get("/:userId/findsendfrom", findsendfrom)
-  .get("/findsendto", findsendto)
-  .get("/browsesend", browsesend)
-  .get("/browseclaim", browseclaim)
-  .post("/send", send)
-  .post("/claim", claim)
+  .get("/:userId/findclaimfrom", protect, findclaimfrom)
+  .get("/findclaimto", protect, findclaimto)
+  .get("/:userId/findsendfrom", protect, findsendfrom)
+  .get("/findsendto", protect, findsendto)
+  .get("/browsesend", protect, browsesend)
+  .get("/browseclaim", protect, browseclaim)
+  .post("/send", protect, send)
+  .post("/claim", protect, claim)
 
 module.exports = router;
