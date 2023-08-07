@@ -1,6 +1,6 @@
 const Wallets = require("../models/Wallets"),
   TransactionHistory = require("../models/TransactionHistory"),
-  GCGametoWebHistory = require("../models/CreditBalancehistory.js")
+  GCGametoWebHistory = require("../models/CreditBalancehistory.js"),
   Users = require("../models/Users");
 
 
@@ -91,13 +91,13 @@ exports.loseTransfer = async (req, res) => {
 
       const session = await Wallets.startSession();
       try {
-        session.startTransaction();                  
+        session.startTransaction();
           await Wallets.findOneAndUpdate({ userId: adminDetails[0]?._id}, { $inc: { amount: +adminPer, tong: +tongWallet, pot: +jackpotWalletPer, commission: commissionPer}})
           await Wallets.findOneAndUpdate({ userId: goldDetails[0]?._id}, { $inc: { amount: +goldPer } })
           await Wallets.findOneAndUpdate({ userId: silverDetails[0]?._id}, { $inc: { amount: +silverPer } })
           await TransactionHistory.create(transactionParams)
 
-        res.json([silverPer, goldPer, adminPer, jackpotWalletPer, commissionPer]);
+        res.json({message: "success"});
         await session.commitTransaction();
       } catch (error) {
           await session.abortTransaction();
