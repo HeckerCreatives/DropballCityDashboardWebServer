@@ -20,7 +20,7 @@ router
   .get("/:userId/referrals", referrals)
   .post("/gctoweb", protect, convertgctoweb)
   .get("/gctowebhistory", protect, gcgametoweb)
-  .get("/commissionhistory", protect, commissionhistory)
+  .get("/commissionhistory", commissionhistory)
   .post("/convert", convert)
   .get("/all", everything)
   .get("/:userId/find", find)
