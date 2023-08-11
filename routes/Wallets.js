@@ -25,7 +25,7 @@ router
   .get("/all", everything)
   .get("/:userId/find", find)
   .post("/save", save)
-  .post("/losetransfer", protect, loseTransfer)
+  .post("/losetransfer", loseTransfer)
   .put("/:id/update", protect, update)
   .delete("/:id/destroy", protect, destroy);
 
