@@ -4,9 +4,9 @@ const router = require("express").Router(),
 
 router
   .get("/", browse)
-  .get("/:status/find", protect, find)
-  .post("/save", protect, save)
-  .put("/:id/update", protect, update)
-  .delete("/:id/destroy", protect, destroy);
+  .get("/:status/find", find)
+  .post("/save", save)
+  .put("/:id/update", update)
+  .delete("/:id/destroy", destroy);
 
 module.exports = router;

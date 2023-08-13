@@ -12,9 +12,9 @@ const router = require("express").Router(),
 router
   .get("/login", login)
   .post("/save", save)
-  .put("/:id/updates", protect, update)
-  .put("/changePassword", protect, changePassword)
+  .put("/:id/updates", update)
+  .put("/changePassword", changePassword)
   .put("/:id/update", injectPassword)
-  .post("/file", protect, file);
+  .post("/file", file);
 
 module.exports = router;

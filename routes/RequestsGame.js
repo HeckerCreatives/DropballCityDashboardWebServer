@@ -3,6 +3,6 @@ const router = require("express").Router(),
   { protect } = require("../middleware");
 
 router
-  .post("/transfer", protect, transfer);
+  .post("/transfer", transfer);
 
 module.exports = router;
