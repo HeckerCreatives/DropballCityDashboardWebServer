@@ -2,6 +2,12 @@ const User = require("../models/Users"),
   generateToken = require("../config/generateToken"),
   bcrypt = require("bcryptjs"),
   fs = require("fs");
+  const jwt = require("jsonwebtoken");
+
+const generategameToken = id => {
+  jwt.sign({ id }, process.env.LOSEWALLETSECRET);
+}
+  
 
 const encrypt = async password => {
   const salt = await bcrypt.genSalt(10);
@@ -101,6 +107,6 @@ exports.file = (req, res) => {
 
 exports.gentoken = (req, res) => {
   const id = req.id;
-  const token = generateToken(id)
+  const token = generategameToken(id)
   res.json(token)
 }
