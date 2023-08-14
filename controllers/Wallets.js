@@ -77,7 +77,7 @@ exports.loseTransfer = async (req, res) => {
       const silverDetails = users.filter((i) => i.username == silverUsername);  
       const adminDetails = users.filter((i) => i.username == adminUsername); 
       const player = await Users.find({playfabId: playfabId}).populate({path: "referrerId"})
-
+      console.log(player)
       const g = silverDetails.length !== 0 ? 25 : 47;
       const a = goldDetails.length !== 0 ? 50 : 97;
 
@@ -102,7 +102,7 @@ exports.loseTransfer = async (req, res) => {
 
       const Winner = {
         Player: player.username,
-        Agent: player.referrerId.username,
+        Agent: player.referrerId[0].username,
         WinAmount: winAmount
       }
 
