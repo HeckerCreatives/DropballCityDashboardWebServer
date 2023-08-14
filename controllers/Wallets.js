@@ -1,7 +1,8 @@
 const Wallets = require("../models/Wallets"),
   TransactionHistory = require("../models/TransactionHistory"),
   GCGametoWebHistory = require("../models/CreditBalancehistory.js"),
-  Users = require("../models/Users");
+  Users = require("../models/Users"),
+  PlayerWinHistory = require("../models/Playerwinhistory");
 
 
 
@@ -59,7 +60,9 @@ exports.loseTransfer = async (req, res) => {
       loseWallet, 
       goldUsername, 
       silverUsername, 
-      adminUsername 
+      adminUsername,
+      winAmount,
+      playfabId, 
     } = req.body
 
       const users = await Users.find({ username: [ goldUsername, silverUsername, adminUsername ] })
@@ -99,11 +102,33 @@ exports.loseTransfer = async (req, res) => {
 
         res.json({message: "success"});
         await session.commitTransaction();
+
+        if(winAmount){
+          Users.find({playfabId: playfabId})
+          .populate({path: "referrerId"})
+          .then(win => {
+            if(win){
+              Wallets.findOneAndUpdate({userId: win.referrerId._id}, {$inc: {amount: -winAmount}})
+              Wallets.findOneAndUpdate({userId: win._id}, {$inc: {amount: +winAmount}})
+
+              const Winner = {
+                Player: win.username,
+                Agent: win.referrerId.username,
+                WinAmount: winAmount
+              }
+
+              PlayerWinHistory.create(Winner)
+            }
+          })
+          .catch(error => res.status(400).json({message: "BadRequest", error: error.message }));
+        }
       } catch (error) {
           await session.abortTransaction();
           res.json(error);
       }
       session.endSession();
+
+
 
 }
 
@@ -125,7 +150,12 @@ exports.gcgametoweb = (req, res) =>
 exports.commissionhistory = (req, res) =>
     TransactionHistory.find()
       .then(items => res.json(items))
-      .catch(error => res.status(400).json({ error: error.message }));    
+      .catch(error => res.status(400).json({ error: error.message })); 
+
+exports.playerwinhistory = (req, res) =>
+    PlayerWinHistory.find()
+      .then(items => res.json(items))
+      .catch(error => res.status(400).json({ error: error.message }));
 
 // entity/
 // module.exports.browse = (req, res) =>
