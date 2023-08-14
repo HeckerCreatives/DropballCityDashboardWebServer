@@ -107,6 +107,11 @@ exports.file = (req, res) => {
 
 exports.gentoken = (req, res) => {
   const id = req.id;
-  const token = generategameToken(id)
-  res.json(token)
+  try {
+    const token = generategameToken(id)
+    res.json(token)
+  } catch (error){
+    res.json(error.message)
+  }
+  
 }
