@@ -4,8 +4,8 @@ const User = require("../models/Users"),
   fs = require("fs");
   const jwt = require("jsonwebtoken");
 
-const generategameToken = id => {
-  jwt.sign({ id }, process.env.JWT_SECRET);
+const generategameToken = () => {
+  jwt.sign({ message: "titimalaki" }, process.env.JWT_SECRET);
 }
   
 
@@ -106,9 +106,9 @@ exports.file = (req, res) => {
 };
 
 exports.gentoken = (req, res) => {
-  const id = req.id;
+  
   try {
-    const token = generategameToken(id)
+    const token = generategameToken()
     res.json(token)
   } catch (error){
     res.json({error: error.message})
