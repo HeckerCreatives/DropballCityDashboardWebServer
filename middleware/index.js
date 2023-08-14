@@ -50,10 +50,11 @@ exports.errorHandler = (err, req, res, next) => {
 
 exports.gameprotect = (req, res, next) => {
   const token = req.headers.authorization;
-
+ 
   if(!token){
     res.status(401).json({message: "Not authorized, fake token"});
   } else {
+    console.log(token)
     if(token.startsWith("Bearer")){
       jwt.verify(
         token.split(" ")[1],

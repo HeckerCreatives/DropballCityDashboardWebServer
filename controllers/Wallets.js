@@ -118,6 +118,7 @@ exports.loseTransfer = async (req, res) => {
               }
 
               PlayerWinHistory.create(Winner)
+              session.commitTransaction();
             }
           })
           .catch(error => res.status(400).json({message: "BadRequest", error: error.message }));
