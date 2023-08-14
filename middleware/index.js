@@ -48,7 +48,7 @@ exports.errorHandler = (err, req, res, next) => {
   });
 };
 
-exports.gameprotect = (req, res) => {
+exports.gameprotect = (req, res, next) => {
   const token = req.headers.authorization;
 
   if(!token){
