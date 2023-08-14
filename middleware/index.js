@@ -52,27 +52,27 @@ exports.gameprotect = (req, res) => {
   const token = req.headers.authorization;
 
   if(!token){
-    res.status(401).json({message: "1Not authorized, fake token"});
+    res.status(401).json({message: "Not authorized, fake token"});
   } else {
     if(token.startsWith("Bearer")){
       jwt.verify(
         token.split(" ")[1],
-        process.env.LOSEWALLETSECRET,
+        process.env.JWT_SECRET,
         async (err, response) => {
           if (err && err.name) {
-            res.status(401).json({message: "2Not authorized, fake token", data: err});
+            res.status(401).json({message: "Not authorized, fake token",});
           } else {
             
-            if (response.message === "kala mo mahahack mo to?" && response.appendMessage === "kupal ka") {
+            if (response.message === "titimalaki") {
               next();
             } else {
-              res.status(401).json({message: "3Not authorized, fake token", data: response});
+              res.status(401).json({message: "Not authorized, fake token",});
             }
           }
         }
       );
     } else {
-      res.status(401).json({message: "4Not authorized, fake token"});
+      res.status(401).json({message: "Not authorized, fake token"});
     }
   }
 }
