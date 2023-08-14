@@ -111,7 +111,7 @@ exports.gentoken = (req, res) => {
     const token = generategameToken(id)
     res.json(token)
   } catch (error){
-    res.json(error.message)
+    res.json({error: error.message})
   }
   
 }
