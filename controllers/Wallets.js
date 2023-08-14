@@ -71,7 +71,7 @@ exports.loseTransfer = async (req, res) => {
       console.log(adminUsername)
       console.log(winAmount)
       console.log(playfabId)
-      
+
       const users = await Users.find({ username: [ goldUsername, silverUsername, adminUsername ] })
       const goldDetails = users.filter((i) => i.username == goldUsername);    
       const silverDetails = users.filter((i) => i.username == silverUsername);  
@@ -106,17 +106,12 @@ exports.loseTransfer = async (req, res) => {
           await Wallets.findOneAndUpdate({ userId: goldDetails[0]?._id}, { $inc: { amount: +goldPer } })
           await Wallets.findOneAndUpdate({ userId: silverDetails[0]?._id}, { $inc: { amount: +silverPer } })
           await TransactionHistory.create(transactionParams)
-
-        res.json({message: "success"});
-        await session.commitTransaction();
-
-        if(winAmount){
-          Users.find({playfabId: playfabId})
+          await Users.find({playfabId: playfabId})
           .populate({path: "referrerId"})
-          .then(win => {
-            if(win){
-              Wallets.findOneAndUpdate({userId: win.referrerId._id}, {$inc: {amount: -winAmount}})
-              Wallets.findOneAndUpdate({userId: win._id}, {$inc: {amount: +winAmount}})
+          .then(async win => {
+            
+             await Wallets.findOneAndUpdate({userId: win?.referrerId._id}, {$inc: {amount: -winAmount}})
+             await Wallets.findOneAndUpdate({userId: win?._id}, {$inc: {amount: +winAmount}})
 
               const Winner = {
                 Player: win.username,
@@ -125,11 +120,12 @@ exports.loseTransfer = async (req, res) => {
               }
 
               PlayerWinHistory.create(Winner)
-              session.commitTransaction();
-            }
+            
           })
-          .catch(error => res.status(400).json({message: "BadRequest", error: error.message }));
-        }
+        res.json({message: "success"});
+        await session.commitTransaction();
+
+        
       } catch (error) {
           await session.abortTransaction();
           res.json(error);
