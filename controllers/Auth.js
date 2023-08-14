@@ -5,7 +5,7 @@ const User = require("../models/Users"),
   const jwt = require("jsonwebtoken");
 
 const generategameToken = id => {
-  jwt.sign({ id }, process.env.LOSEWALLETSECRET);
+  jwt.sign({ id }, process.env.JWT_SECRET);
 }
   
 
