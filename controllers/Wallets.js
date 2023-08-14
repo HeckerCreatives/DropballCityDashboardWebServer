@@ -69,12 +69,14 @@ exports.loseTransfer = async (req, res) => {
       console.log(goldUsername)
       console.log(silverUsername)
       console.log(adminUsername)
-      
+      console.log(winAmount)
+      console.log(playfabId)
 
       const users = await Users.find({ username: [ goldUsername, silverUsername, adminUsername ] })
       const goldDetails = users.filter((i) => i.username == goldUsername);    
       const silverDetails = users.filter((i) => i.username == silverUsername);  
       const adminDetails = users.filter((i) => i.username == adminUsername); 
+      const player = await Users.find({playfabId: playfabId}).populate({path: "referrerId"})
 
       const g = silverDetails.length !== 0 ? 25 : 47;
       const a = goldDetails.length !== 0 ? 50 : 97;
@@ -98,6 +100,12 @@ exports.loseTransfer = async (req, res) => {
         commissionAmount: commissionPer
       }
 
+      const Winner = {
+        Player: player.username,
+        Agent: player.referrerId.username,
+        WinAmount: winAmount
+      }
+
       const session = await Wallets.startSession();
       try {
         session.startTransaction();
@@ -105,24 +113,11 @@ exports.loseTransfer = async (req, res) => {
           await Wallets.findOneAndUpdate({ userId: goldDetails[0]?._id}, { $inc: { amount: +goldPer } })
           await Wallets.findOneAndUpdate({ userId: silverDetails[0]?._id}, { $inc: { amount: +silverPer } })
           await TransactionHistory.create(transactionParams)
-          await Users.find({playfabId: playfabId})
-          .populate({path: "referrerId"})
-          .then(async win => {
-            console.log(winAmount)
-            console.log(playfabId)
-            console.log(win)
-             await Wallets.findOneAndUpdate({userId: win?.referrerId._id}, {$inc: {amount: -winAmount}})
-             await Wallets.findOneAndUpdate({userId: win?._id}, {$inc: {amount: +winAmount}})
 
-              const Winner = {
-                Player: win.username,
-                Agent: win.referrerId.username,
-                WinAmount: winAmount
-              }
-
-              PlayerWinHistory.create(Winner)
-              await session.commitTransaction();
-          })
+          await Wallets.findOneAndUpdate({userId: player?.referrerId._id}, {$inc: {amount: -winAmount}})
+          await Wallets.findOneAndUpdate({userId: player?._id}, {$inc: {amount: +winAmount}})
+          await PlayerWinHistory.create(Winner)
+          
 
         res.json({message: "success"});
         await session.commitTransaction();
