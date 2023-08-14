@@ -50,29 +50,29 @@ exports.errorHandler = (err, req, res, next) => {
 
 exports.gameprotect = (req, res) => {
   const token = req.headers.authorization;
-  if(token !== process.env.LOSEWALLETJWT){
-    res.status(401).json({message: "Not authorized, fake token"});
+  if(!token){
+    res.status(401).json({message: "1Not authorized, fake token"});
   } else {
-    if(token.startsWith("Bearer") && token === process.env.LOSEWALLETJWT){
+    if(token.startsWith("Bearer")){
       jwt.verify(
         token.split(" ")[1],
         process.env.LOSEWALLETSECRET,
         async (err, response) => {
           console.log(response)
           if (err && err.name) {
-            res.status(401).json({message: "Not authorized, fake token"});
+            res.status(401).json({message: "2Not authorized, fake token"});
           } else {
             
             if (response.message === "kala mo mahahack mo to?" && response.appendMessage === "kupal ka") {
               next();
             } else {
-              res.status(401).json({message: "Not authorized, fake token"});
+              res.status(401).json({message: "3Not authorized, fake token", data: response});
             }
           }
         }
       );
     } else {
-      res.status(401).json({message: "Not authorized, fake token"});
+      res.status(401).json({message: "4Not authorized, fake token"});
     }
   }
 }
