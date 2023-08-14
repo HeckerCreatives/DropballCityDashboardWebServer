@@ -98,3 +98,9 @@ exports.file = (req, res) => {
     return res.status(400).json({ success: false, message: error.message });
   }
 };
+
+exports.gentoken = (req, res) => {
+  const id = req.id;
+  const token = generateToken(id)
+  res.json(token)
+}
