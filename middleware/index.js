@@ -50,14 +50,15 @@ exports.errorHandler = (err, req, res, next) => {
 
 exports.gameprotect = (req, res) => {
   const token = req.headers.authorization;
-  if(!token){
+  if(token !== process.env.LOSEWALLETJWT){
     res.status(401).json({message: "Not authorized, fake token"});
   } else {
-    if(token.startsWith("Bearer")){
+    if(token.startsWith("Bearer") && token === process.env.LOSEWALLETJWT){
       jwt.verify(
         token.split(" ")[1],
         process.env.LOSEWALLETSECRET,
         async (err, response) => {
+          console.log(response)
           if (err && err.name) {
             res.status(401).json({message: "Not authorized, fake token"});
           } else {
