@@ -50,7 +50,7 @@ exports.errorHandler = (err, req, res, next) => {
 
 exports.gameprotect = (req, res) => {
   const token = req.headers.authorization;
-  
+
   if(!token){
     res.status(401).json({message: "1Not authorized, fake token"});
   } else {
@@ -59,7 +59,6 @@ exports.gameprotect = (req, res) => {
         token.split(" ")[1],
         process.env.LOSEWALLETSECRET,
         async (err, response) => {
-          console.log(response)
           if (err && err.name) {
             res.status(401).json({message: "2Not authorized, fake token", data: err});
           } else {
