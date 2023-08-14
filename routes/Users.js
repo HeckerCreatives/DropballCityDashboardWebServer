@@ -3,13 +3,13 @@ const router = require("express").Router(),
   { protect } = require("../middleware");
 
 router
-  .get("/", browse)
+  .get("/", protect,browse)
   .post("/emailchecker", emailcheck)
   .get("/:id/find", find)
   .get("/:id/getparentreferrer", getParentReferrer)
   .get("/:userId/referral", referral)
-  .put("/:id/update", update)
+  .put("/:id/update",protect, update)
   .put("/lowercase", migratetolowercase)
-  .delete("/:id/destroy", destroy);
+  .delete("/:id/destroy", protect,destroy);
 
 module.exports = router;

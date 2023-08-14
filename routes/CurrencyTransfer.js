@@ -7,8 +7,8 @@ const router = require("express").Router(),
 { protect } = require("../middleware");
 
 router
-.post("/convertcurrency", convertCurrency)
-.get("/webtogamedc", browsedc)
-.get("/webtogameic", browseic)
+.post("/convertcurrency",protect, convertCurrency)
+.get("/webtogamedc", protect, browsedc)
+.get("/webtogameic", protect, browseic)
 
 module.exports = router;

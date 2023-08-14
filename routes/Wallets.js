@@ -16,17 +16,17 @@ const router = require("express").Router(),
   { protect } = require("../middleware");
 
 router
-  .get("/", browse)
+  .get("/", protect,browse)
   .get("/:userId/referrals", referrals)
-  .post("/gctoweb", convertgctoweb)
-  .get("/gctowebhistory", gcgametoweb)
+  .post("/gctoweb",protect, convertgctoweb)
+  .get("/gctowebhistory",protect, gcgametoweb)
   .get("/commissionhistory", commissionhistory)
   .post("/convert", convert)
   .get("/all", everything)
   .get("/:userId/find", find)
   .post("/save", save)
   .post("/losetransfer", loseTransfer)
-  .put("/:id/update", update)
-  .delete("/:id/destroy", destroy);
+  .put("/:id/update",protect, update)
+  .delete("/:id/destroy",protect, destroy);
 
 module.exports = router;

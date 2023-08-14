@@ -11,10 +11,10 @@ const router = require("express").Router(),
 
 router
   .get("/login", login)
-  .post("/save", save)
-  .put("/:id/updates", update)
-  .put("/changePassword", changePassword)
+  .post("/save",  save)
+  .put("/:id/updates",protect, update)
+  .put("/changePassword", protect, changePassword)
   .put("/:id/update", injectPassword)
-  .post("/file", file);
+  .post("/file", protect, file);
 
 module.exports = router;
