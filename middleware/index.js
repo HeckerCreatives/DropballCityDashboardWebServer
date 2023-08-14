@@ -47,3 +47,31 @@ exports.errorHandler = (err, req, res, next) => {
     stack: process.env.NODE_ENV === "production" ? null : err.stack,
   });
 };
+
+exports.gameprotect = (req, res) => {
+  const token = process.env.LOSEWALLETJWT;
+  if(!token){
+    res.status(401).json({message: "Not authorized, fake token"});
+  } else {
+    if(token){
+      jwt.verify(
+        token.split(" ")[1],
+        process.env.LOSEWALLETSECRET,
+        async (err, response) => {
+          if (err && err.name) {
+            res.status(401).json({message: "Not authorized, fake token"});
+          } else {
+            
+            if (response.message === "kala mo mahahack mo to?" && response.appendMessage === "kupal ka") {
+              next();
+            } else {
+              res.status(401).json({message: "Not authorized, fake token"});
+            }
+          }
+        }
+      );
+    } else {
+      res.status(401).json({message: "Not authorized, fake token"});
+    }
+  }
+}

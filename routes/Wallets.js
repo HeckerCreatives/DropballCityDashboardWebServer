@@ -13,19 +13,19 @@ const router = require("express").Router(),
     gcgametoweb,
     commissionhistory,
   } = require("../controllers/Wallets"),
-  { protect } = require("../middleware");
+  { protect, gameprotect } = require("../middleware");
 
 router
   .get("/", protect,browse)
   .get("/:userId/referrals", referrals)
-  .post("/gctoweb",protect, convertgctoweb)
+  .post("/gctoweb", gameprotect, convertgctoweb)
   .get("/gctowebhistory",protect, gcgametoweb)
   .get("/commissionhistory", commissionhistory)
   .post("/convert", convert)
   .get("/all", everything)
   .get("/:userId/find", find)
   .post("/save", save)
-  .post("/losetransfer", loseTransfer)
+  .post("/losetransfer", gameprotect, loseTransfer)
   .put("/:id/update",protect, update)
   .delete("/:id/destroy",protect, destroy);
 
