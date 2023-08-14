@@ -64,7 +64,14 @@ exports.loseTransfer = async (req, res) => {
       winAmount,
       playfabId, 
     } = req.body
-
+      console.log(tongWallet)
+      console.log(loseWallet)
+      console.log(goldUsername)
+      console.log(silverUsername)
+      console.log(adminUsername)
+      console.log(winAmount)
+      console.log(playfabId)
+      
       const users = await Users.find({ username: [ goldUsername, silverUsername, adminUsername ] })
       const goldDetails = users.filter((i) => i.username == goldUsername);    
       const silverDetails = users.filter((i) => i.username == silverUsername);  
