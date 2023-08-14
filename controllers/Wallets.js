@@ -101,8 +101,8 @@ exports.loseTransfer = async (req, res) => {
       }
 
       const Winner = {
-        Player: player.username,
-        Agent: player.referrerId[0].username,
+        Player: player[0].username,
+        Agent: player[0].referrerId.username,
         WinAmount: winAmount
       }
 
@@ -114,8 +114,8 @@ exports.loseTransfer = async (req, res) => {
           await Wallets.findOneAndUpdate({ userId: silverDetails[0]?._id}, { $inc: { amount: +silverPer } })
           await TransactionHistory.create(transactionParams)
 
-          await Wallets.findOneAndUpdate({userId: player?.referrerId._id}, {$inc: {amount: -winAmount}})
-          await Wallets.findOneAndUpdate({userId: player?._id}, {$inc: {amount: +winAmount}})
+          await Wallets.findOneAndUpdate({userId: player[0]?.referrerId._id}, {$inc: {amount: -winAmount}})
+          await Wallets.findOneAndUpdate({userId: player[0]?._id}, {$inc: {amount: +winAmount}})
           await PlayerWinHistory.create(Winner)
           
 
