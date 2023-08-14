@@ -69,8 +69,7 @@ exports.loseTransfer = async (req, res) => {
       console.log(goldUsername)
       console.log(silverUsername)
       console.log(adminUsername)
-      console.log(winAmount)
-      console.log(playfabId)
+      
 
       const users = await Users.find({ username: [ goldUsername, silverUsername, adminUsername ] })
       const goldDetails = users.filter((i) => i.username == goldUsername);    
@@ -109,7 +108,9 @@ exports.loseTransfer = async (req, res) => {
           await Users.find({playfabId: playfabId})
           .populate({path: "referrerId"})
           .then(async win => {
-            
+            console.log(winAmount)
+            console.log(playfabId)
+            console.log(win)
              await Wallets.findOneAndUpdate({userId: win?.referrerId._id}, {$inc: {amount: -winAmount}})
              await Wallets.findOneAndUpdate({userId: win?._id}, {$inc: {amount: +winAmount}})
 
@@ -120,8 +121,9 @@ exports.loseTransfer = async (req, res) => {
               }
 
               PlayerWinHistory.create(Winner)
-            
+              await session.commitTransaction();
           })
+
         res.json({message: "success"});
         await session.commitTransaction();
 
