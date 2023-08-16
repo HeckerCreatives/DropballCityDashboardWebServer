@@ -3,7 +3,7 @@ const Wallets = require("../models/Wallets"),
   GCGametoWebHistory = require("../models/CreditBalancehistory.js"),
   Users = require("../models/Users"),
   PlayerWinHistory = require("../models/Playerwinhistory");
-  const { startOfDay, endOfDay } = require('date-fns');
+  const { startOfDay, endOfDay, startOfMonth, endOfMonth, startOfYear, endOfYear } = require('date-fns');
 
 
 exports.convert = async (req, res) => {
@@ -342,7 +342,7 @@ exports.deducthistory = (req, res) => {
   
 }
 
-exports.totaldeducthistory = async (req, res) => {
+exports.totaldeductperday = async (req, res) => {
   const { agent } = req.body;
 
   const currentDate = new Date();
@@ -366,6 +366,56 @@ exports.totaldeducthistory = async (req, res) => {
     ])
 
     res.json(perDay.length? perDay[0].totaldeduction: 0)
+}
+
+exports.totaldeductpermonth = async (req, res) => {
+  const { agent } = req.body;
+
+  const currentDate = new Date();
+  const currentstartOfMonth = startOfMonth(currentDate);
+  const currentendOfMonth = endOfMonth(currentDate);
 
   
+    const perMonth = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentstartOfMonth, $lte: currentendOfMonth}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+
+    res.json(perMonth.length? perMonth[0].totaldeduction: 0)
+}
+
+exports.totaldeductperyear = async (req, res) => {
+  const { agent } = req.body;
+
+  const currentDate = new Date();
+  const currentstartOfYear = startOfYear(currentDate);
+  const currentendOfYear = endOfYear(currentDate);
+
+  
+    const perYear = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentstartOfYear, $lte: currentendOfYear}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+
+    res.json(perYear.length? perYear[0].totaldeduction: 0)
 }

@@ -14,14 +14,18 @@ const router = require("express").Router(),
     commissionhistory,
     playerwinhistory,
     deducthistory,
-    totaldeducthistory
+    totaldeductperday,
+    totaldeductpermonth,
+    totaldeductperyear
   } = require("../controllers/Wallets"),
   { protect, gameprotect } = require("../middleware");
 
 router
   .get("/", protect,browse)
   .post("/deductionhistory", protect, deducthistory)
-  .post("/totaldeductionhistory", protect, totaldeducthistory)
+  .post("/totaldeductionperday", protect, totaldeductperday)
+  .post("/totaldeductionpermonth", protect, totaldeductpermonth)
+  .post("/totaldeductionperyear", protect, totaldeductperyear)
   .get("/:userId/referrals", referrals)
   .post("/gctoweb", gameprotect, convertgctoweb)
   .get("/gctowebhistory",protect, gcgametoweb)
