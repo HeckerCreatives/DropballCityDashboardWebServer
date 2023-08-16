@@ -115,7 +115,7 @@ exports.loseTransfer = async (req, res) => {
           await TransactionHistory.create(transactionParams)
 
           await Wallets.findOneAndUpdate({userId: player[0]?.referrerId._id}, {$inc: {amount: -winAmount}})
-          
+
           await PlayerWinHistory.create(Winner)
           
 
@@ -319,3 +319,15 @@ exports.destroy = (req, res) =>
   })
     .then(() => res.json(req.params.id))
     .catch(error => res.status(400).json({ error: error.message }));
+
+exports.deducthistory = (req, res) => {
+  const agent = req.body;
+
+  PlayerWinHistory.find({Agent: agent})
+  .then((data)=>{
+    res.json({message: "success", data: data})
+  })
+  .catch((error)=>{
+    res.status(400).json({message:"BadRequest", error: error.message})
+  })
+}
