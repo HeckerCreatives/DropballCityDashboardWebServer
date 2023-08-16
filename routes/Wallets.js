@@ -13,13 +13,15 @@ const router = require("express").Router(),
     gcgametoweb,
     commissionhistory,
     playerwinhistory,
-    deducthistory
+    deducthistory,
+    totaldeducthistory
   } = require("../controllers/Wallets"),
   { protect, gameprotect } = require("../middleware");
 
 router
   .get("/", protect,browse)
   .post("/deductionhistory", protect, deducthistory)
+  .post("/totaldeductionhistory", protect, totaldeducthistory)
   .get("/:userId/referrals", referrals)
   .post("/gctoweb", gameprotect, convertgctoweb)
   .get("/gctowebhistory",protect, gcgametoweb)
