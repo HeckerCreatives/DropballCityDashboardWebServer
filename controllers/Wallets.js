@@ -419,3 +419,185 @@ exports.totaldeductperyear = async (req, res) => {
 
     res.json(perYear.length? perYear[0].totaldeduction: 0)
 }
+
+exports.totalcommissionperday = async (req, res) => {
+  const { agent } = req.body;
+
+  const currentDate = new Date();
+  const currentStartOfDay = startOfDay(currentDate);
+  const currentEndOfDay = endOfDay(currentDate);
+
+  const user = Users.find({username: agent}).populate({path: "roleId"})
+  
+  if(user.roleId.name === "admin"){
+    const perDay = await TransactionHistory.aggregate([
+      {
+        $match: {
+          adminUsername: agent,
+          createdAt: {$gte: currentStartOfDay, $lte: currentEndOfDay}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalcommission: {$sum: "$commissionAmount"}
+        }
+      }
+    ])
+    res.json(perDay.length? perDay[0].totalcommission: 0)
+  } else if (user.roleId.name === "gold"){
+    const perDay = await TransactionHistory.aggregate([
+      {
+        $match: {
+          goldUsername: agent,
+          createdAt: {$gte: currentStartOfDay, $lte: currentEndOfDay}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalcommission: {$sum: "$goldAmount"}
+        }
+      }
+    ])
+    res.json(perDay.length? perDay[0].totalcommission: 0)
+  } else if (user.roleId.name === "silver"){
+    const perDay = await TransactionHistory.aggregate([
+      {
+        $match: {
+          silverUsername: agent,
+          createdAt: {$gte: currentStartOfDay, $lte: currentEndOfDay}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalcommission: {$sum: "$silverAmount"}
+        }
+      }
+    ])
+    res.json(perDay.length? perDay[0].totalcommission: 0)
+  }
+}
+
+exports.totalcommissionpermonth = async (req, res) => {
+  const { agent } = req.body;
+
+  const currentDate = new Date();
+  const currentstartOfMonth = startOfMonth(currentDate);
+  const currentendOfMonth = endOfMonth(currentDate);
+  const user = Users.find({username: agent}).populate({path: "roleId"})
+  
+  if(user.roleId.name === "admin"){
+    const perMonth = await TransactionHistory.aggregate([
+      {
+        $match: {
+          adminUsername: agent,
+          createdAt: {$gte: currentstartOfMonth, $lte: currentendOfMonth}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalcommission: {$sum: "$commissionAmount"}
+        }
+      }
+    ])
+    res.json(perMonth.length? perMonth[0].totalcommission: 0)
+  } else if (user.roleId.name === "gold"){
+    const perMonth = await TransactionHistory.aggregate([
+      {
+        $match: {
+          goldUsername: agent,
+          createdAt: {$gte: currentstartOfMonth, $lte: currentendOfMonth}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalcommission: {$sum: "$goldAmount"}
+        }
+      }
+    ])
+    res.json(perMonth.length? perMonth[0].totalcommission: 0)
+  } else if (user.roleId.name === "silver"){
+    const perMonth = await TransactionHistory.aggregate([
+      {
+        $match: {
+          silverUsername: agent,
+          createdAt: {$gte: currentstartOfMonth, $lte: currentendOfMonth}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalcommission: {$sum: "$silverAmount"}
+        }
+      }
+    ])
+    res.json(perMonth.length? perMonth[0].totalcommission: 0)
+  }
+    
+
+    
+}
+
+exports.totalcommissionperyear = async (req, res) => {
+  const { agent } = req.body;
+
+  const currentDate = new Date();
+  const currentstartOfYear = startOfYear(currentDate);
+  const currentendOfYear = endOfYear(currentDate);
+
+  const user = Users.find({username: agent}).populate({path: "roleId"})
+  
+  if(user.roleId.name === "admin"){
+    const perYear = await TransactionHistory.aggregate([
+      {
+        $match: {
+          adminUsername: agent,
+          createdAt: {$gte: currentstartOfYear, $lte: currentendOfYear}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalcommission: {$sum: "$commissionAmount"}
+        }
+      }
+    ])
+    res.json(perYear.length? perYear[0].totalcommission: 0)
+  } else if (user.roleId.name === "gold"){
+    const perYear = await TransactionHistory.aggregate([
+      {
+        $match: {
+          goldUsername: agent,
+          createdAt: {$gte: currentstartOfYear, $lte: currentendOfYear}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalcommission: {$sum: "$goldAmount"}
+        }
+      }
+    ])
+    res.json(perYear.length? perYear[0].totalcommission: 0)
+  } else if (user.roleId.name === "silver"){
+    const perYear = await TransactionHistory.aggregate([
+      {
+        $match: {
+          silverUsername: agent,
+          createdAt: {$gte: currentstartOfYear, $lte: currentendOfYear}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalcommission: {$sum: "$silverAmount"}
+        }
+      }
+    ])
+    res.json(perYear.length? perYear[0].totalcommission: 0)
+  }
+}

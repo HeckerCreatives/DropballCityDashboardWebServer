@@ -16,7 +16,10 @@ const router = require("express").Router(),
     deducthistory,
     totaldeductperday,
     totaldeductpermonth,
-    totaldeductperyear
+    totaldeductperyear,
+    totalcommissionperday,
+    totalcommissionpermonth,
+    totalcommissionperyear
   } = require("../controllers/Wallets"),
   { protect, gameprotect } = require("../middleware");
 
@@ -26,6 +29,9 @@ router
   .post("/totaldeductionperday", protect, totaldeductperday)
   .post("/totaldeductionpermonth", protect, totaldeductpermonth)
   .post("/totaldeductionperyear", protect, totaldeductperyear)
+  .post("/totalcommissionperday", protect, totalcommissionperday)
+  .post("/totalcommissionpermonth", protect, totalcommissionpermonth)
+  .post("/totalcommissionperyear", protect, totalcommissionperyear)
   .get("/:userId/referrals", referrals)
   .post("/gctoweb", gameprotect, convertgctoweb)
   .get("/gctowebhistory",protect, gcgametoweb)
