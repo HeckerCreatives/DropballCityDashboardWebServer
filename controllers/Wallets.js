@@ -364,7 +364,7 @@ exports.totaldeducthistory = async (req, res) => {
       }
     ])
 
-    res.json(perDay[0].totaldeduction)
+    res.json(perDay)
 
   
 }
