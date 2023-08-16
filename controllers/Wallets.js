@@ -429,7 +429,7 @@ exports.totalcommissionperday = async (req, res) => {
 
   const user = await Users.find({username: agent}).populate({path: "roleId"})
   
-  if(user.roleId.name === "admin"){
+  if(user[0].roleId.name === "admin"){
     const perDay = await TransactionHistory.aggregate([
       {
         $match: {
@@ -445,7 +445,7 @@ exports.totalcommissionperday = async (req, res) => {
       }
     ])
     res.json(perDay.length? perDay[0].totalcommission: 0)
-  } else if (user.roleId.name === "gold"){
+  } else if (user[0].roleId.name === "gold"){
     const perDay = await TransactionHistory.aggregate([
       {
         $match: {
@@ -461,7 +461,7 @@ exports.totalcommissionperday = async (req, res) => {
       }
     ])
     res.json(perDay.length? perDay[0].totalcommission: 0)
-  } else if (user.roleId.name === "silver"){
+  } else if (user[0].roleId.name === "silver"){
     const perDay = await TransactionHistory.aggregate([
       {
         $match: {
@@ -488,7 +488,7 @@ exports.totalcommissionpermonth = async (req, res) => {
   const currentendOfMonth = endOfMonth(currentDate);
   const user = await Users.find({username: agent}).populate({path: "roleId"})
   
-  if(user.roleId.name === "admin"){
+  if(user[0].roleId.name === "admin"){
     const perMonth = await TransactionHistory.aggregate([
       {
         $match: {
@@ -504,7 +504,7 @@ exports.totalcommissionpermonth = async (req, res) => {
       }
     ])
     res.json(perMonth.length? perMonth[0].totalcommission: 0)
-  } else if (user.roleId.name === "gold"){
+  } else if (user[0].roleId.name === "gold"){
     const perMonth = await TransactionHistory.aggregate([
       {
         $match: {
@@ -520,7 +520,7 @@ exports.totalcommissionpermonth = async (req, res) => {
       }
     ])
     res.json(perMonth.length? perMonth[0].totalcommission: 0)
-  } else if (user.roleId.name === "silver"){
+  } else if (user[0].roleId.name === "silver"){
     const perMonth = await TransactionHistory.aggregate([
       {
         $match: {
@@ -551,7 +551,7 @@ exports.totalcommissionperyear = async (req, res) => {
 
   const user = await Users.find({username: agent}).populate({path: "roleId"})
   
-  if(user.roleId.name === "admin"){
+  if(user[0].roleId.name === "admin"){
     const perYear = await TransactionHistory.aggregate([
       {
         $match: {
@@ -567,7 +567,7 @@ exports.totalcommissionperyear = async (req, res) => {
       }
     ])
     res.json(perYear.length? perYear[0].totalcommission: 0)
-  } else if (user.roleId.name === "gold"){
+  } else if (user[0].roleId.name === "gold"){
     const perYear = await TransactionHistory.aggregate([
       {
         $match: {
@@ -583,7 +583,7 @@ exports.totalcommissionperyear = async (req, res) => {
       }
     ])
     res.json(perYear.length? perYear[0].totalcommission: 0)
-  } else if (user.roleId.name === "silver"){
+  } else if (user[0].roleId.name === "silver"){
     const perYear = await TransactionHistory.aggregate([
       {
         $match: {
