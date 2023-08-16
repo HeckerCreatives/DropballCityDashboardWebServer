@@ -115,7 +115,7 @@ exports.loseTransfer = async (req, res) => {
           await TransactionHistory.create(transactionParams)
 
           await Wallets.findOneAndUpdate({userId: player[0]?.referrerId._id}, {$inc: {amount: -winAmount}})
-          await Wallets.findOneAndUpdate({userId: player[0]?._id}, {$inc: {amount: +winAmount}})
+          
           await PlayerWinHistory.create(Winner)
           
 
