@@ -3,7 +3,7 @@ const Wallets = require("../models/Wallets"),
   GCGametoWebHistory = require("../models/CreditBalancehistory.js"),
   Users = require("../models/Users"),
   PlayerWinHistory = require("../models/Playerwinhistory");
-
+  const { startOfDay, endOfDay } = require('date-fns');
 
 
 exports.convert = async (req, res) => {
@@ -340,4 +340,32 @@ exports.deducthistory = (req, res) => {
     })
   }
   
+}
+
+exports.totaldeducthistory = async (req, res) => {
+  const { agent } = req.body;
+
+  const currentDate = new Date();
+  const currentStartOfDay = startOfDay(currentDate);
+  const currentEndOfDay = endOfDay(currentDate);
+
+  PlayerWinHistory.find({Agent: agent})
+  .then((data) => {
+    const perDay = data.aggregate([
+      {
+        $match: {
+          createdAt: {$gte: currentStartOfDay, $lte: currentEndOfDay}
+        }
+      },
+      {
+        $group: {
+          totaldeduction: {$sum: "WinAmount"}
+        }
+      }
+    ])
+    res.json(perDay[0].totaldeduction)
+  })
+  .catch((error)=>{
+    res.status(400).json({message:"BadRequest", error: error.message})
+  })
 }
