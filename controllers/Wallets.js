@@ -322,12 +322,22 @@ exports.destroy = (req, res) =>
 
 exports.deducthistory = (req, res) => {
   const { agent } = req.body;
-
-  PlayerWinHistory.find({Agent: agent})
+  if(agent === "dropballcityadmin"){
+  PlayerWinHistory.find()
   .then((data)=>{
     res.json({message: "success", data: data})
   })
   .catch((error)=>{
     res.status(400).json({message:"BadRequest", error: error.message})
   })
+  } else {
+    PlayerWinHistory.find({Agent: agent})
+    .then((data)=>{
+      res.json({message: "success", data: data})
+    })
+    .catch((error)=>{
+      res.status(400).json({message:"BadRequest", error: error.message})
+    })
+  }
+  
 }
