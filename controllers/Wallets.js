@@ -359,12 +359,12 @@ exports.totaldeducthistory = async (req, res) => {
       },
       {
         $group: {
-          totaldeduction: {$sum: "WinAmount"}
+          totaldeduction: {$sum: "$WinAmount"}
         }
       }
     ])
 
-    res.json(perDay)
+    res.json(perDay.length? perDay[0].totaldeduction: 0)
 
   
 }
