@@ -427,7 +427,7 @@ exports.totalcommissionperday = async (req, res) => {
   const currentStartOfDay = startOfDay(currentDate);
   const currentEndOfDay = endOfDay(currentDate);
 
-  const user = Users.find({username: agent}).populate({path: "roleId"})
+  const user = await Users.find({username: agent}).populate({path: "roleId"})
   
   if(user.roleId.name === "admin"){
     const perDay = await TransactionHistory.aggregate([
@@ -486,7 +486,7 @@ exports.totalcommissionpermonth = async (req, res) => {
   const currentDate = new Date();
   const currentstartOfMonth = startOfMonth(currentDate);
   const currentendOfMonth = endOfMonth(currentDate);
-  const user = Users.find({username: agent}).populate({path: "roleId"})
+  const user = await Users.find({username: agent}).populate({path: "roleId"})
   
   if(user.roleId.name === "admin"){
     const perMonth = await TransactionHistory.aggregate([
@@ -549,7 +549,7 @@ exports.totalcommissionperyear = async (req, res) => {
   const currentstartOfYear = startOfYear(currentDate);
   const currentendOfYear = endOfYear(currentDate);
 
-  const user = Users.find({username: agent}).populate({path: "roleId"})
+  const user = await Users.find({username: agent}).populate({path: "roleId"})
   
   if(user.roleId.name === "admin"){
     const perYear = await TransactionHistory.aggregate([
