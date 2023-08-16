@@ -349,11 +349,11 @@ exports.totaldeducthistory = async (req, res) => {
   const currentStartOfDay = startOfDay(currentDate);
   const currentEndOfDay = endOfDay(currentDate);
 
-  PlayerWinHistory.find({Agent: agent})
-  .then((data) => {
-    const perDay = data.aggregate([
+  
+    const perDay = PlayerWinHistory.aggregate([
       {
         $match: {
+          Agent: agent,
           createdAt: {$gte: currentStartOfDay, $lte: currentEndOfDay}
         }
       },
@@ -363,9 +363,8 @@ exports.totaldeducthistory = async (req, res) => {
         }
       }
     ])
+
     res.json(perDay[0].totaldeduction)
-  })
-  .catch((error)=>{
-    res.status(400).json({message:"BadRequest", error: error.message})
-  })
+
+  
 }
