@@ -350,7 +350,7 @@ exports.totaldeducthistory = async (req, res) => {
   const currentEndOfDay = endOfDay(currentDate);
 
   
-    const perDay = PlayerWinHistory.aggregate([
+    const perDay = await PlayerWinHistory.aggregate([
       {
         $match: {
           Agent: agent,
@@ -359,6 +359,7 @@ exports.totaldeducthistory = async (req, res) => {
       },
       {
         $group: {
+          _id: null,
           totaldeduction: {$sum: "$WinAmount"}
         }
       }
