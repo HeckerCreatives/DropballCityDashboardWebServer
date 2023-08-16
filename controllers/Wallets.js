@@ -321,7 +321,7 @@ exports.destroy = (req, res) =>
     .catch(error => res.status(400).json({ error: error.message }));
 
 exports.deducthistory = (req, res) => {
-  const agent = req.body;
+  const { agent } = req.body;
 
   PlayerWinHistory.find({Agent: agent})
   .then((data)=>{
