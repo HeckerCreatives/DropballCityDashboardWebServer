@@ -158,6 +158,7 @@ exports.gcgametoweb = (req, res) =>
 
 exports.commissionhistory = async (req, res) => {
   const { agent } = req.body;
+  
   let query;
   const user = await Users.find({username: agent}).populate({path: "roleId"})
 
