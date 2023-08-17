@@ -86,7 +86,8 @@ exports.loseTransfer = async (req, res) => {
       const adminPer = (loseWallet / 100) * a; 
       const jackpotWalletPer = (loseWallet / 100) * 3;
       const commissionPer = silverPer + goldPer + adminPer;
-
+      const win60 = winAmount * .60;
+      const win40 = winAmount * .40;
       const transactionParams = {
         tongAmount: tongWallet,
         loseAmount: loseWallet,
@@ -100,10 +101,16 @@ exports.loseTransfer = async (req, res) => {
         commissionAmount: commissionPer
       }
 
-      const Winner = {
+      const Winner60 = {
         Player: player[0].username,
         Agent: player[0].referrerId.username,
-        WinAmount: winAmount
+        WinAmount: win60
+      }
+
+      const Winner40 = {
+        Player: player[0].username,
+        Agent: adminUsername,
+        WinAmount: win40
       }
 
       const session = await Wallets.startSession();
@@ -114,10 +121,11 @@ exports.loseTransfer = async (req, res) => {
           await Wallets.findOneAndUpdate({ userId: silverDetails[0]?._id}, { $inc: { amount: +silverPer } })
           await TransactionHistory.create(transactionParams)
 
-          await Wallets.findOneAndUpdate({userId: player[0]?.referrerId._id}, {$inc: {amount: -winAmount}})
+          await Wallets.findOneAndUpdate({userId: player[0]?.referrerId._id}, {$inc: {amount: -win60}})
+          await Wallets.findOneAndUpdate({ userId: adminDetails[0]?._id}, { $inc: { amount: -win40}})
 
-          await PlayerWinHistory.create(Winner)
-          
+          await PlayerWinHistory.create(Winner60)
+          await PlayerWinHistory.create(Winner40)
 
         res.json({message: "success"});
         await session.commitTransaction();
@@ -320,27 +328,41 @@ exports.destroy = (req, res) =>
     .then(() => res.json(req.params.id))
     .catch(error => res.status(400).json({ error: error.message }));
 
+// exports.deducthistory = (req, res) => {
+//   const { agent } = req.body;
+//   if(agent === "dropballcityadmin"){
+//   PlayerWinHistory.find()
+//   .then((data)=>{
+//     res.json({message: "success", data: data})
+//   })
+//   .catch((error)=>{
+//     res.status(400).json({message:"BadRequest", error: error.message})
+//   })
+//   } else {
+//     PlayerWinHistory.find({Agent: agent})
+//     .then((data)=>{
+//       res.json({message: "success", data: data})
+//     })
+//     .catch((error)=>{
+//       res.status(400).json({message:"BadRequest", error: error.message})
+//     })
+//   }
+  
+// }
+
 exports.deducthistory = (req, res) => {
   const { agent } = req.body;
-  if(agent === "dropballcityadmin"){
-  PlayerWinHistory.find()
-  .then((data)=>{
-    res.json({message: "success", data: data})
-  })
-  .catch((error)=>{
-    res.status(400).json({message:"BadRequest", error: error.message})
-  })
-  } else {
-    PlayerWinHistory.find({Agent: agent})
-    .then((data)=>{
-      res.json({message: "success", data: data})
+  const query = agent === "dropballcityadmin" ? {} : { Agent: agent, amount: { $ne: 0 } };
+
+  PlayerWinHistory.find(query)
+    .then((data) => {
+      res.json({ message: "success", data: data });
     })
-    .catch((error)=>{
-      res.status(400).json({message:"BadRequest", error: error.message})
-    })
-  }
-  
-}
+    .catch((error) => {
+      res.status(400).json({ message: "BadRequest", error: error.message });
+    });
+};
+
 
 exports.totaldeductperday = async (req, res) => {
   const { agent } = req.body;
