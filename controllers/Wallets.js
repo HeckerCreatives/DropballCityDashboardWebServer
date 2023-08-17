@@ -352,7 +352,11 @@ exports.destroy = (req, res) =>
 
 exports.deducthistory = (req, res) => {
   const { agent } = req.body;
-  const query = agent === "dropballcityadmin" ? {} : { Agent: agent, WinAmount: { $ne: 0 } };
+  const query = { amount: { $ne: 0 } };
+
+  if (agent !== "dropballcityadmin") {
+    query.Agent = agent;
+  }
 
   PlayerWinHistory.find(query)
     .then((data) => {
@@ -362,6 +366,7 @@ exports.deducthistory = (req, res) => {
       res.status(400).json({ message: "BadRequest", error: error.message });
     });
 };
+
 
 
 exports.totaldeductperday = async (req, res) => {
