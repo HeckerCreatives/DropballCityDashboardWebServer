@@ -352,7 +352,7 @@ exports.destroy = (req, res) =>
 
 exports.deducthistory = (req, res) => {
   const { agent } = req.body;
-  const query = { amount: { $ne: 0 } };
+  const query = { WinAmount: { $ne: 0 } };
 
   if (agent !== "dropballcityadmin") {
     query.Agent = agent;
