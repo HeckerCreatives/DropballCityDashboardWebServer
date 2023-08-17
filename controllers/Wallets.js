@@ -64,20 +64,12 @@ exports.loseTransfer = async (req, res) => {
       winAmount,
       playfabId, 
     } = req.body
-      console.log(tongWallet)
-      console.log(loseWallet)
-      console.log(goldUsername)
-      console.log(silverUsername)
-      console.log(adminUsername)
-      console.log(winAmount)
-      console.log(playfabId)
 
       const users = await Users.find({ username: [ goldUsername, silverUsername, adminUsername ] })
       const goldDetails = users.filter((i) => i.username == goldUsername);    
       const silverDetails = users.filter((i) => i.username == silverUsername);  
       const adminDetails = users.filter((i) => i.username == adminUsername); 
       const player = await Users.find({playfabId: playfabId}).populate({path: "referrerId"})
-      console.log(player)
       const g = silverDetails.length !== 0 ? 25 : 47;
       const a = goldDetails.length !== 0 ? 50 : 97;
 
@@ -88,6 +80,7 @@ exports.loseTransfer = async (req, res) => {
       const commissionPer = silverPer + goldPer + adminPer;
       const win60 = winAmount * .60;
       const win40 = winAmount * .40;
+
       const transactionParams = {
         tongAmount: tongWallet,
         loseAmount: loseWallet,
@@ -97,6 +90,7 @@ exports.loseTransfer = async (req, res) => {
         adminAmount: adminPer,
         goldAmount: goldPer,
         silverAmount: silverPer,
+        playerUsername: player[0].username,
         potAmount: jackpotWalletPer,
         commissionAmount: commissionPer
       }
@@ -173,7 +167,7 @@ exports.commissionhistory = async (req, res) => {
   } else if (user[0].roleId.name === "silver"){
 
     query = {silverUsername: agent, silverAmount: {$ne: 0}}
-    
+
   }
 
   TransactionHistory.find(query)

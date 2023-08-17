@@ -14,6 +14,9 @@ const requestSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    playerUsername: {
+      type: String,
+    },
     silverUsername: {
       type: String,
     },
