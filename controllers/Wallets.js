@@ -158,16 +158,22 @@ exports.gcgametoweb = (req, res) =>
 
 exports.commissionhistory = async (req, res) => {
   const { agent } = req.body;
-  
+
   let query;
-  const user = await Users.find({username: agent}).populate({path: "roleId"})
+  const user = await Users.find({username: agent}).populate({ path: "roleId" })
 
   if (user[0].roleId.name === "admin"){
+
     query = {adminUsername: agent, commissionAmount: {$ne: 0}}
+
   } else if (user[0].roleId.name === "gold"){
+
     query = {goldUsername: agent, goldAmount: {$ne: 0}}
+
   } else if (user[0].roleId.name === "silver"){
+
     query = {silverUsername: agent, silverAmount: {$ne: 0}}
+    
   }
 
   TransactionHistory.find(query)
