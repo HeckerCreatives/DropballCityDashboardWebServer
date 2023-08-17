@@ -156,10 +156,10 @@ exports.gcgametoweb = (req, res) =>
     .then(items => res.json(items))
     .catch(error => res.status(400).json({ error: error.message }));
 
-exports.commissionhistory = (req, res) => {
+exports.commissionhistory = async (req, res) => {
   const { agent } = req.body;
   let query;
-  const user = Users.find({username: agent}).populate({path: "roleId"})
+  const user = await Users.find({username: agent}).populate({path: "roleId"})
 
   if (user[0].roleId.name === "admin"){
     query = {adminUsername: agent, commissionAmount: {$ne: 0}}
@@ -168,7 +168,7 @@ exports.commissionhistory = (req, res) => {
   } else if (user[0].roleId.name === "silver"){
     query = {silverUsername: agent, silverAmount: {$ne: 0}}
   }
-  
+
   TransactionHistory.find(query)
   .then(items => res.json(items))
   .catch(error => res.status(400).json({ error: error.message }));
