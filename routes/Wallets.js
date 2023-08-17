@@ -35,7 +35,7 @@ router
   .get("/:userId/referrals", referrals)
   .post("/gctoweb", gameprotect, convertgctoweb)
   .get("/gctowebhistory",protect, gcgametoweb)
-  .get("/commissionhistory", commissionhistory)
+  .post("/commissionhistory", commissionhistory)
   .get("/palyerwinhistory", playerwinhistory)
   .post("/convert", convert)
   .get("/all", everything)

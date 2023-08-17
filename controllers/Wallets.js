@@ -156,10 +156,24 @@ exports.gcgametoweb = (req, res) =>
     .then(items => res.json(items))
     .catch(error => res.status(400).json({ error: error.message }));
 
-exports.commissionhistory = (req, res) =>
-    TransactionHistory.find()
-      .then(items => res.json(items))
-      .catch(error => res.status(400).json({ error: error.message })); 
+exports.commissionhistory = (req, res) => {
+  const { agent } = req.body;
+  let query;
+  const user = Users.find({username: agent}).populate({path: "roleId"})
+
+  if (user[0].roleId.name === "admin"){
+    query = {adminUsername: agent, commissionAmount: {$ne: 0}}
+  } else if (user[0].roleId.name === "gold"){
+    query = {goldUsername: agent, goldAmount: {$ne: 0}}
+  } else if (user[0].roleId.name === "silver"){
+    query = {silverUsername: agent, silverAmount: {$ne: 0}}
+  }
+  
+  TransactionHistory.find(query)
+  .then(items => res.json(items))
+  .catch(error => res.status(400).json({ error: error.message }));
+}
+     
 
 exports.playerwinhistory = (req, res) =>
     PlayerWinHistory.find()
