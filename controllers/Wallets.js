@@ -352,7 +352,7 @@ exports.destroy = (req, res) =>
 
 exports.deducthistory = (req, res) => {
   const { agent } = req.body;
-  const query = agent === "dropballcityadmin" ? {} : { Agent: agent, amount: { $ne: 0 } };
+  const query = agent === "dropballcityadmin" ? {} : { Agent: agent, WinAmount: { $ne: 0 } };
 
   PlayerWinHistory.find(query)
     .then((data) => {
