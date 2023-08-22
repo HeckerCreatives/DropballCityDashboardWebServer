@@ -433,11 +433,7 @@ exports.deducthistory = (req, res) => {
 
 exports.totaldeducthistory = (req, res) => {
   const { agent } = req.body;
-  const query = { WinAmount: { $ne: 0 } };
-
-  if (agent !== "dropballcityadmin") {
-    query.Agent = agent;
-  }
+  const query = {Agent: agent};
 
   PlayerWinHistory.aggregate([
     { $match: query },
