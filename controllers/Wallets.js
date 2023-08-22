@@ -431,6 +431,34 @@ exports.deducthistory = (req, res) => {
     });
 };
 
+exports.totaldeducthistory = (req, res) => {
+  const { agent } = req.body;
+  const query = { WinAmount: { $ne: 0 } };
+
+  if (agent !== "dropballcityadmin") {
+    query.Agent = agent;
+  }
+
+  PlayerWinHistory.aggregate([
+    { $match: query },
+    {
+      $group: {
+        _id: null,
+        totalAmount: { $sum: `$${WinAmount}` }
+      }
+    }
+  ])
+  .then(result => {
+    if (result.length === 0) {
+      return res.json({ totalAmount: 0 });
+    } else {
+      return res.json(result[0]);
+    }
+  })
+    .catch((error) => {
+      res.status(400).json({ message: "BadRequest", error: error.message });
+    });
+};
 
 
 exports.totaldeductperday = async (req, res) => {
