@@ -440,7 +440,7 @@ exports.totaldeducthistory = (req, res) => {
     {
       $group: {
         _id: null,
-        totalAmount: { $sum: `WinAmount` }
+        totalAmount: { $sum: `$WinAmount` }
       }
     }
   ])
