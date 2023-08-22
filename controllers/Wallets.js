@@ -174,6 +174,55 @@ exports.commissionhistory = async (req, res) => {
   .then(items => res.json(items))
   .catch(error => res.status(400).json({ error: error.message }));
 }
+
+exports.totalcommissionhistory = async (req, res) => {
+  const { agent } = req.body;
+
+  try {
+    const user = await Users.findOne({ username: agent }).populate("roleId");
+
+    if (!user) {
+      return res.status(404).json({ error: "Agent not found" });
+    }
+
+    let query;
+    let amountField;
+    
+    if (user.roleId.name === "admin") {
+      query = { adminUsername: agent, commissionAmount: { $ne: 0 } };
+      amountField = "commissionAmount";
+    } else if (user.roleId.name === "gold") {
+      query = { goldUsername: agent, goldAmount: { $ne: 0 } };
+      amountField = "goldAmount";
+    } else if (user.roleId.name === "silver") {
+      query = { silverUsername: agent, silverAmount: { $ne: 0 } };
+      amountField = "silverAmount";
+    } else {
+      return res.status(400).json({ error: "Invalid role" });
+    }
+
+    TransactionHistory.aggregate([
+      { $match: query },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: `$${amountField}` }
+        }
+      }
+    ])
+    .then(result => {
+      if (result.length === 0) {
+        return res.json({ totalAmount: 0 });
+      } else {
+        return res.json(result[0]);
+      }
+    })
+    .catch(error => res.status(500).json({ error: error.message }));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
      
 
 exports.playerwinhistory = (req, res) =>
