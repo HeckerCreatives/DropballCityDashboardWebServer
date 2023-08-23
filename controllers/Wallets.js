@@ -73,10 +73,12 @@ exports.loseTransfer = async (req, res) => {
       const player = await Users.find({playfabId: playfabId}).populate({path: "referrerId"})
       let g;
       let a;
-
+      let jackpotWalletPer;
+      
       if(game === "dropball"){
        g = silverDetails.length !== 0 ? 20 : 47;
       //  a = goldDetails.length !== 0 ? 50 : 97;
+      jackpotWalletPer = (loseWallet / 100) * 3;
       a = 37;
       } else {
         g = silverDetails.length !== 0 ? 20 : 60;
@@ -88,7 +90,7 @@ exports.loseTransfer = async (req, res) => {
       const silverPer = silverDetails.length !== 0 ? (loseWallet / 100) * 40 : 0;
       const goldPer = goldDetails.length !== 0 ? (loseWallet / 100) * g : 0;
       const adminPer = (loseWallet / 100) * a; 
-      const jackpotWalletPer = (loseWallet / 100) * 3;
+      
       const commissionPer = silverPer + goldPer + adminPer;
       const win60 = winAmount * .60;
       const win40 = winAmount * .40;
