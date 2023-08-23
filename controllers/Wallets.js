@@ -62,7 +62,8 @@ exports.loseTransfer = async (req, res) => {
       silverUsername, 
       adminUsername,
       winAmount,
-      playfabId, 
+      playfabId,
+      game, // ipasa dito kung anung game yun? 
     } = req.body
 
       const users = await Users.find({ username: [ goldUsername, silverUsername, adminUsername ] })
@@ -70,10 +71,21 @@ exports.loseTransfer = async (req, res) => {
       const silverDetails = users.filter((i) => i.username == silverUsername);  
       const adminDetails = users.filter((i) => i.username == adminUsername); 
       const player = await Users.find({playfabId: playfabId}).populate({path: "referrerId"})
-      const g = silverDetails.length !== 0 ? 25 : 47;
-      const a = goldDetails.length !== 0 ? 50 : 97;
+      let g;
+      let a;
 
-      const silverPer = silverDetails.length !== 0 ? (loseWallet / 100) * 22 : 0;
+      if(game === "dropball"){
+       g = silverDetails.length !== 0 ? 20 : 47;
+      //  a = goldDetails.length !== 0 ? 50 : 97;
+      a = 37;
+      } else {
+        g = silverDetails.length !== 0 ? 20 : 60;
+        // a = goldDetails.length !== 0 ? 40 : 97;
+        a = 40;
+      }
+      
+
+      const silverPer = silverDetails.length !== 0 ? (loseWallet / 100) * 40 : 0;
       const goldPer = goldDetails.length !== 0 ? (loseWallet / 100) * g : 0;
       const adminPer = (loseWallet / 100) * a; 
       const jackpotWalletPer = (loseWallet / 100) * 3;
