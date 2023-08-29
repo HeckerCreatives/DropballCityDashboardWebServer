@@ -16,6 +16,7 @@ const routers = app => {
   app.use("/limitRequest", require("./LimitRequests"));
   app.use("/currency", require("./CurrencyTransfer"));
   app.use("/credits", require("./Credits"));
+  app.use("/migrate", require("./Migrate"));
   // app.use(middleware.notFound);
   // app.use(middleware.errorHandler);
 };
