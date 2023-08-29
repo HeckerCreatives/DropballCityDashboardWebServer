@@ -6,3 +6,5 @@ const router = require("express").Router(),
 
 router
   .post("/usermigrate", migrateuser);
+
+module.exports = router;
