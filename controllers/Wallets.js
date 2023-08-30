@@ -36,7 +36,7 @@ exports.convertgctoweb = async (req, res) => {
   const session = await Wallets.startSession();
   try {
     session.startTransaction();
-    const player = await Users.find({username: username})
+    const player = await Users.find({username: username.toLowerCase()})
     if(player){
       await Wallets.findOneAndUpdate({userId : player[0]._id}, {$inc: {amount: +amount}})
       const gcgametowebhistory = {
