@@ -44,8 +44,11 @@ exports.convertgctoweb = async (req, res) => {
         usertransferAmount: amount,
       }
       await GCGametoWebHistory.create(gcgametowebhistory)
-    }        
       res.json({ response: "success" })
+    } else {
+      res.json({ response: "fail" })
+    }       
+      
       await session.commitTransaction();
   } catch (error) {
     await session.abortTransaction();
