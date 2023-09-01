@@ -79,7 +79,7 @@ exports.loseTransfer = async (req, res) => {
       let jackpotWalletPer;
 
       if(game === "dropball"){
-       g = silverDetails.length !== 0 ? 20 : 47;
+       g = silverDetails.length !== 0 ? 20 : 60;
       //  a = goldDetails.length !== 0 ? 50 : 97;
       jackpotWalletPer = (loseWallet / 100) * 3;
       a = 37;
