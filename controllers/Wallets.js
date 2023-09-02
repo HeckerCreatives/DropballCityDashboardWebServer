@@ -18,8 +18,10 @@ exports.convert = async (req, res) => {
           } else if (type === "tong") {
               await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { initial: +amount, tong: -amount}})
           } else if (type === "credit") {
-              await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { initial: +amount, amount: -amount}})
-          }
+              await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { pot: +amount, amount: -amount}})
+          } else if (type === "pot") {
+            await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { pot: -amount}})
+        }
 
          res.json({ response: "success" })
         await session.commitTransaction();
