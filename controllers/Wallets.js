@@ -214,7 +214,7 @@ exports.totalcommissionhistory = async (req, res) => {
     let amountField;
     
     if (user.roleId.name === "admin") {
-      query = { adminUsername: agent, commissionAmount: { $ne: 0 } };
+      query = { adminUsername: agent, adminAmount: { $ne: 0 } };
       amountField = "commissionAmount";
     } else if (user.roleId.name === "gold") {
       query = { goldUsername: agent, goldAmount: { $ne: 0 } };
@@ -580,7 +580,7 @@ exports.totalcommissionperday = async (req, res) => {
       {
         $group: {
           _id: null,
-          totalcommission: {$sum: "$commissionAmount"}
+          totalcommission: {$sum: "$adminAmount"}
         }
       }
     ])
@@ -639,7 +639,7 @@ exports.totalcommissionpermonth = async (req, res) => {
       {
         $group: {
           _id: null,
-          totalcommission: {$sum: "$commissionAmount"}
+          totalcommission: {$sum: "$adminAmount"}
         }
       }
     ])
@@ -702,7 +702,7 @@ exports.totalcommissionperyear = async (req, res) => {
       {
         $group: {
           _id: null,
-          totalcommission: {$sum: "$commissionAmount"}
+          totalcommission: {$sum: "$adminAmount"}
         }
       }
     ])
