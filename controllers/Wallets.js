@@ -215,7 +215,7 @@ exports.totalcommissionhistory = async (req, res) => {
     
     if (user.roleId.name === "admin") {
       query = { adminUsername: agent, adminAmount: { $ne: 0 } };
-      amountField = "commissionAmount";
+      amountField = "adminAmount";
     } else if (user.roleId.name === "gold") {
       query = { goldUsername: agent, goldAmount: { $ne: 0 } };
       amountField = "goldAmount";
