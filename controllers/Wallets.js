@@ -98,7 +98,7 @@ exports.loseTransfer = async (req, res) => {
       const goldPer = goldDetails.length !== 0 ? (loseWallet / 100) * g : 0;
       const adminPer = (loseWallet / 100) * a; 
       
-      const commissionPer = silverPer + goldPer + adminPer;
+      const commissionPer = adminPer;
       const win60 = winAmount * .60;
       const win40 = winAmount * .40;
 
