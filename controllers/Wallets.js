@@ -77,17 +77,17 @@ exports.loseTransfer = async (req, res) => {
       const player = await Users.find({playfabId: playfabId}).populate({path: "referrerId"})
       let g;
       let a;
-      let jackpotWalletPer;
+      // let jackpotWalletPer;
 
       if(game === "dropball"){
        g = silverDetails.length !== 0 ? 20 : 60;
       //  a = goldDetails.length !== 0 ? 50 : 97;
-      jackpotWalletPer = (loseWallet / 100) * 3;
+      // jackpotWalletPer = (loseWallet / 100) * 3;
       a = 37;
       } else {
         g = silverDetails.length !== 0 ? 20 : 60;
         // a = goldDetails.length !== 0 ? 40 : 97;
-        jackpotWalletPer = 0;
+        // jackpotWalletPer = 0;
         a = 40;
       }
       
@@ -110,7 +110,7 @@ exports.loseTransfer = async (req, res) => {
         goldAmount: goldPer,
         silverAmount: silverPer,
         playerUsername: player[0].username,
-        potAmount: jackpotWalletPer,
+        // potAmount: jackpotWalletPer,
         commissionAmount: commissionPer,
         Game: game,
         Round: round,
@@ -135,7 +135,7 @@ exports.loseTransfer = async (req, res) => {
       const session = await Wallets.startSession();
       try {
         session.startTransaction();
-          await Wallets.findOneAndUpdate({ userId: adminDetails[0]?._id}, { $inc: { amount: +adminPer, tong: +tongWallet, pot: +jackpotWalletPer, commission: commissionPer}})
+          await Wallets.findOneAndUpdate({ userId: adminDetails[0]?._id}, { $inc: { amount: +adminPer, tong: +tongWallet, commission: commissionPer}})
           await Wallets.findOneAndUpdate({ userId: goldDetails[0]?._id}, { $inc: { amount: +goldPer } })
           await Wallets.findOneAndUpdate({ userId: silverDetails[0]?._id}, { $inc: { amount: +silverPer } })
           await TransactionHistory.create(transactionParams)
