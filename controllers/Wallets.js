@@ -14,9 +14,9 @@ exports.convert = async (req, res) => {
         session.startTransaction();           
          const admin = await Users.find({username: "dropballcityadmin"})       
           if (type === "commission") {
-              await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { initial: +amount, commission: -amount}})
+              await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
           } else if (type === "tong") {
-              await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { initial: +amount, tong: -amount}})
+              await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, tong: -amount}})
           } else if (type === "credit") {
               await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { pot: +amount, amount: -amount}})
           } else if (type === "pot") {
@@ -137,9 +137,9 @@ exports.loseTransfer = async (req, res) => {
       const session = await Wallets.startSession();
       try {
         session.startTransaction();
-          await Wallets.findOneAndUpdate({ userId: adminDetails[0]?._id}, { $inc: { amount: +adminPer, tong: +tongWallet, commission: commissionPer}})
-          await Wallets.findOneAndUpdate({ userId: goldDetails[0]?._id}, { $inc: { amount: +goldPer } })
-          await Wallets.findOneAndUpdate({ userId: silverDetails[0]?._id}, { $inc: { amount: +silverPer } })
+          await Wallets.findOneAndUpdate({ userId: adminDetails[0]?._id}, { $inc: {  tong: +tongWallet, commission: commissionPer}})
+          await Wallets.findOneAndUpdate({ userId: goldDetails[0]?._id}, { $inc: { commission: +goldPer } })
+          await Wallets.findOneAndUpdate({ userId: silverDetails[0]?._id}, { $inc: { commission: +silverPer } })
           await TransactionHistory.create(transactionParams)
 
           await Wallets.findOneAndUpdate({userId: player[0]?.referrerId._id}, {$inc: {amount: -win60}})
