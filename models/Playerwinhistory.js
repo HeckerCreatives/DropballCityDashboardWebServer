@@ -14,6 +14,14 @@ const playerWinHistorySchema = new mongoose.Schema(
         WinAmount:{
             type: Number,
             required: true
+        },
+        Game:{
+            type: String,
+            required: true
+        },
+        Round:{
+            type: Number,
+            required: true
         }
     },
     {

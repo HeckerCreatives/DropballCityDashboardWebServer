@@ -67,6 +67,7 @@ exports.loseTransfer = async (req, res) => {
       winAmount,
       playfabId,
       game, // ipasa dito kung anung game yun? 
+      round,
     } = req.body
 
       const users = await Users.find({ username: [ goldUsername, silverUsername, adminUsername ] })
@@ -110,19 +111,25 @@ exports.loseTransfer = async (req, res) => {
         silverAmount: silverPer,
         playerUsername: player[0].username,
         potAmount: jackpotWalletPer,
-        commissionAmount: commissionPer
+        commissionAmount: commissionPer,
+        Game: game,
+        Round: round,
       }
 
       const Winner60 = {
         Player: player[0].username,
         Agent: player[0].referrerId.username,
-        WinAmount: win60
+        WinAmount: win60,
+        Game: game,
+        Round: round, 
       }
 
       const Winner40 = {
         Player: player[0].username,
         Agent: adminUsername,
-        WinAmount: win40
+        WinAmount: win40,
+        Game: game,
+        Round: round,
       }
 
       const session = await Wallets.startSession();

@@ -38,6 +38,14 @@ const requestSchema = new mongoose.Schema(
     commissionAmount: {
       type: Number
     },
+    Game:{
+      type: String,
+      required: true
+    },
+    Round:{
+      type: Number,
+      required: true
+    }
   },
   {
     timestamps: true,
