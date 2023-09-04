@@ -196,3 +196,22 @@ exports.goldbanusers = (req, res) => {
   })
   .catch(err => res.json({message:"BadRequest", data:err.message}))
 }
+
+exports.silverbanusers = (req, res) => {
+  const silver = req.body.silver;
+
+  User.findOne({username: silver})
+  .populate({path: 'roleId'})
+  .then(user =>{
+    if(!user.roleId.name === 'silver'){
+      res.json({message: "fail", data: 'you are not a silver agent'})
+    } else {
+      User.find({referrerId: user._id, deletedAt: {$exists: true}})
+      .then(user => {
+        res.json({message: 'success', data: user})
+      })
+      .catch(err => res.json({message:"BadRequest", data:err.message}))
+    }
+  })
+  .catch(err => res.json({message:"BadRequest", data:err.message}))
+}
