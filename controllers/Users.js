@@ -187,9 +187,9 @@ exports.goldbanusers = (req, res) => {
     if(!user.roleId.name === 'gold'){
       res.json({message: "fail", data: 'you are not a gold agent'})
     } else {
-      User.find({referrerId: user._id, deletedAt: {$exists: true}})
+      User.find({referrerId: user._id})
       .then(user => {
-        res.json({message: 'success', data: user})
+        res.json({message: 'success', data: user.filter(e => e.deletedAt)})
       })
       .catch(err => res.json({message:"BadRequest", data:err.message}))
     }
