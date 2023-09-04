@@ -7,12 +7,12 @@ const Wallets = require("../models/Wallets"),
 
 
 exports.convert = async (req, res) => {
-    const { amount, type } = req.body
+    const { username ,amount, type } = req.body
 
      const session = await Wallets.startSession();
       try {
         session.startTransaction();           
-         const admin = await Users.find({username: "dropballcityadmin"})       
+         const admin = await Users.find({username: username})       
           if (type === "commission") {
               await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
           } else if (type === "tong") {
