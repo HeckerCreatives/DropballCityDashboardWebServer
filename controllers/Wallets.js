@@ -367,10 +367,12 @@ exports.everything = async (req, res) => {
 // entity/
 exports.referrals = async (req, res) => {
   try {
-    const userList = await Users.find({deletedAt: {$exists: false}}).byRefferal(req.params.userId).populate({
+    const userList = await Users.find().byRefferal(req.params.userId).populate({
       path: "roleId",
       select: "display_name name"
-    });
+    }).then(user => {
+      return user.filter(e => !e.deletedAt)
+    })
     
     const users = userList;
 
