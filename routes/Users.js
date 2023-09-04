@@ -1,10 +1,11 @@
 const router = require("express").Router(),
-  { browse, find, update, destroy, referral, getParentReferrer, migratetolowercase, emailcheck } = require("../controllers/Users"),
+  { browse, find, update, destroy, referral, getParentReferrer, migratetolowercase, emailcheck, goldbanusers } = require("../controllers/Users"),
   { protect } = require("../middleware");
 
 router
   .get("/", protect,browse)
   .post("/emailchecker", emailcheck)
+  .post("/goldbanusers", protect ,goldbanusers)
   .get("/:id/find", find)
   .get("/:id/getparentreferrer", getParentReferrer)
   .get("/:userId/referral", referral)

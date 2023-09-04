@@ -177,4 +177,20 @@ exports.emailcheck = (req, res) => {
     })
     .catch(error => res.status(400).json({ error: error.message }));
 }
-  
+
+exports.goldbanusers = (req, res) => {
+  const gold = req.body
+
+  User.findOne({username: gold})
+  .populate({path: 'roleId'})
+  .then(user =>{
+    if(!user.roleId.name === 'gold'){
+      res.json({message: "fail", data: 'you are not a gold agent'})
+    } else {
+      User.find({referrerId: user._id, deletedAt: {$exists: true}})
+      .then(user => {
+        res.json({message: 'success', data: user})
+      })
+    }
+  })
+}
