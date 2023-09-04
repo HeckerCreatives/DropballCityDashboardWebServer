@@ -21,7 +21,8 @@ const router = require("express").Router(),
     totalcommissionpermonth,
     totalcommissionperyear,
     totalcommissionhistory,
-    totaldeducthistory
+    totaldeducthistory,
+    convertpottogame
   } = require("../controllers/Wallets"),
   { protect, gameprotect } = require("../middleware");
 
@@ -37,6 +38,7 @@ router
   .post("/totalcommissionperyear", protect, totalcommissionperyear)
   .get("/:userId/referrals", referrals)
   .post("/gctoweb", gameprotect, convertgctoweb)
+  .post("/pottogame", gameprotect, convertpottogame)
   .get("/gctowebhistory",protect, gcgametoweb)
   .post("/commissionhistory", commissionhistory)
   .post("/totalcommissionhistory", totalcommissionhistory)

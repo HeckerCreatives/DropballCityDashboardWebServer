@@ -59,6 +59,33 @@ exports.convertgctoweb = async (req, res) => {
   session.endSession();
 }
 
+exports.convertpottogame = async (req, res) => {
+  const { amount } = req.body
+
+  const session = await Wallets.startSession();
+  try {
+    session.startTransaction();
+    const admin = await Users.find({username: "dropballcityadmin"})
+    if(admin){
+      await Wallets.findOneAndUpdate({userId : admin[0]._id}, {$inc: {pot: -amount}})
+      // const gcgametowebhistory = {
+      //   user: username,
+      //   usertransferAmount: amount,
+      // }
+      // await GCGametoWebHistory.create(gcgametowebhistory)
+      res.json({ response: "success" })
+    } else {
+      res.json({ response: "fail" })
+    }       
+      
+      await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+    res.json(error);
+  }
+  session.endSession();
+}
+
 exports.loseTransfer = async (req, res) => {
     const { 
       tongWallet, 
