@@ -179,7 +179,7 @@ exports.emailcheck = (req, res) => {
 }
 
 exports.goldbanusers = (req, res) => {
-  const gold = req.body
+  const gold = req.body.gold;
 
   User.findOne({username: gold})
   .populate({path: 'roleId'})
@@ -191,6 +191,8 @@ exports.goldbanusers = (req, res) => {
       .then(user => {
         res.json({message: 'success', data: user})
       })
+      .catch(err => res.json({message:"BadRequest", data:err.message}))
     }
   })
+  .catch(err => res.json({message:"BadRequest", data:err.message}))
 }
