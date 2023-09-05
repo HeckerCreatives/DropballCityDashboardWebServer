@@ -223,10 +223,11 @@ exports.silverbanusers = (req, res) => {
   User.findOne({username: silver})
   .populate({path: 'roleId'})
   .then(user =>{
-    if(!user.roleId.name === 'silver'){
+    if(user.roleId.name !== 'silver'){
       res.json({message: "fail", data: 'you are not a silver agent'})
     } else {
       User.find({referrerId: user._id})
+      .populate({path: 'roleId'})
       .then(user => {
         res.json({message: 'success', data: user.filter(e => e.deletedAt)})
       })
