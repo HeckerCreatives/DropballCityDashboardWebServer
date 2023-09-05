@@ -22,7 +22,7 @@ exports.protect = (req, res, next) => {
             } else if(req.user.deletedAt){
               res
                 .status(401)
-                .json({ message: "Not authorized, invalid token" });
+                .json({ message: "ban" });
             }
             
             else {
