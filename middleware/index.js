@@ -17,7 +17,7 @@ exports.protect = (req, res, next) => {
             res.status(401).json({ expired: "Not authorized, token expired" });
           } else {
             req.user = await User.findById(response.id).select("-password");
-            if (req.user) {
+            if (!req.user.deletedAt) {
               next();
             } else {
               res
