@@ -19,6 +19,8 @@ exports.protect = (req, res, next) => {
             req.user = await User.findById(response.id).select("-password");
             if (!req.user.deletedAt) {
               next();
+            } else if (req.user.deletedAt){
+              localStorage.removeItem('auth')
             } else {
               res
                 .status(401)
