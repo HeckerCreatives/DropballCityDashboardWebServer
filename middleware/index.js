@@ -19,6 +19,11 @@ exports.protect = (req, res, next) => {
             req.user = await User.findById(response.id).select("-password");
             if (!req.user.deletedAt) {
               next();
+
+
+
+
+              
             } else {
               res
                 .status(401)
