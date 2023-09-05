@@ -19,7 +19,13 @@ exports.protect = (req, res, next) => {
             req.user = await User.findById(response.id).select("-password");
             if (req.user) {
               next();
-            } else {
+            } else if(req.user.deletedAt){
+              res
+                .status(401)
+                .json({ message: "Not authorized, invalid token" });
+            }
+            
+            else {
               res
                 .status(401)
                 .json({ expired: "Not authorized, invalid token" });
