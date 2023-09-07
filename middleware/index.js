@@ -23,9 +23,7 @@ exports.protect = (req, res, next) => {
               res
                 .status(401)
                 .json({ message: "ban" });
-            }
-            
-            else {
+            } else {
               res
                 .status(401)
                 .json({ expired: "Not authorized, invalid token" });

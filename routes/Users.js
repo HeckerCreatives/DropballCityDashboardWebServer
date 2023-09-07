@@ -8,7 +8,7 @@ router
   .post("/goldbanusers", protect ,goldbanusers)
   .post("/goldbanagent", protect ,goldbanagent)
   .post("/silverbanusers", protect ,silverbanusers)
-  .get("/:id/find", protect, find)
+  .get("/:id/find", find)
   .get("/:id/getparentreferrer", getParentReferrer)
   .get("/:userId/referral", referral)
   .put("/:id/update",protect, update)
