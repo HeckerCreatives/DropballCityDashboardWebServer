@@ -9,8 +9,8 @@ router
   .post("/goldbanagent", protect ,goldbanagent)
   .post("/silverbanusers", protect ,silverbanusers)
   .get("/:id/find", protect, find)
-  .get("/:id/getparentreferrer",protect, getParentReferrer)
-  .get("/:userId/referral",protect, referral)
+  .get("/:id/getparentreferrer", getParentReferrer)
+  .get("/:userId/referral", referral)
   .put("/:id/update",protect, update)
   .put("/lowercase", migratetolowercase)
   .delete("/:id/destroy", protect,destroy);
