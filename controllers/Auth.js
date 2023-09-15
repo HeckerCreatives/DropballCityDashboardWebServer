@@ -41,10 +41,22 @@ exports.login = (req, res) => {
 };
 
 // entity/save
-exports.save = (req, res) =>
-  User.create(req.body)
+exports.save = (req, res) => {
+  const {email, username} = req.body;
+
+  User.findOne({ $or: [{ email: email }, { username: username }] })
+  .then(user => {
+    if(user){
+      return res.json({message: "fail", data: "Account already exsist"})
+    }
+    User.create(req.body)
     .then(user => res.json(`${user._id} saved successfully`))
     .catch(error => res.status(400).json({ error: error.message }));
+
+  })
+  .catch(error => res.status(400).json({ error: error.message })); 
+}
+  
     
 exports.update = (req, res) =>
     User.findByIdAndUpdate(req.params.id, req.body, { new: true })
