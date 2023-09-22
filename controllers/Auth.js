@@ -46,9 +46,11 @@ exports.save = (req, res) => {
 
   User.findOne({ $or: [{ email: email }, { username: username }] })
   .then(user => {
+
     if(user){
       return res.json({message: "fail", data: "Account already exsist"})
     }
+    
     User.create(req.body)
     .then(user => res.json(`${user._id} saved successfully`))
     .catch(error => res.status(400).json({ error: error.message }));
