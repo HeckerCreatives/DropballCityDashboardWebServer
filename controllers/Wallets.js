@@ -779,10 +779,11 @@ exports.plusfive = async  (req, res) => {
   const session = await Wallets.startSession();
   try {
     session.startTransaction();
+    const admin = await Users.find({username: "dropballcityadmin"})
     const player = await Users.find({username: username.toLowerCase()})
     if(player){
       await Wallets.findOneAndUpdate({userId : player[0]._id}, {$inc: {amount: 5}})
-      
+      await Wallets.findOneAndUpdate({userId : admin[0]._id}, {$inc: {amount: -5}})
       res.json({ response: "success" })
     } else {
       res.json({ response: "fail" })
