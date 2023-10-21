@@ -772,3 +772,26 @@ exports.totalcommissionperyear = async (req, res) => {
     res.json(perYear.length? perYear[0].totalcommission: 0)
   }
 }
+
+exports.plusfive = async  (req, res) => {
+  const {username} = req.body
+
+  const session = await Wallets.startSession();
+  try {
+    session.startTransaction();
+    const player = await Users.find({username: username.toLowerCase()})
+    if(player){
+      await Wallets.findOneAndUpdate({userId : player[0]._id}, {$inc: {amount: 5}})
+      
+      res.json({ response: "success" })
+    } else {
+      res.json({ response: "fail" })
+    }       
+      
+      await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+    res.json(error);
+  }
+  session.endSession();
+}

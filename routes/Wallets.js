@@ -22,12 +22,14 @@ const router = require("express").Router(),
     totalcommissionperyear,
     totalcommissionhistory,
     totaldeducthistory,
-    convertpottogame
+    convertpottogame,
+    plusfive
   } = require("../controllers/Wallets"),
   { protect, gameprotect } = require("../middleware");
 
 router
   .get("/", protect,browse)
+  .post("/plusfive", protect, plusfive)
   .post("/deductionhistory", protect, deducthistory)
   .post("/totaldeductionhistory", protect, totaldeducthistory)
   .post("/totaldeductionperday", protect, totaldeductperday)
