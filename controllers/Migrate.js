@@ -50,5 +50,31 @@ exports.migrateuser = (req, res) =>{
         Wallets.create(wallet)
     })
 
+    const roles = [
+        {
+          _id: "629a98a5a881575c013b5325",
+          display_name: "Administrator",
+          name: "admin",
+        },
+        {
+          _id: "629a98a5a881575c013b5326",
+          display_name: "Gold Agent",
+          name: "gold",
+        },
+        {
+          _id: "629a98a5a881575c013b5327",
+          display_name: "Silver Agent",
+          name: "silver",
+        },
+        {
+          _id: "629a98a5a881575c013b5328",
+          display_name: "Player",
+          name: "player",
+        },
+      ];
+      roles.map(role => {
+        Role.create(role);
+      });
+
     res.json("Admin and Gold data and wallet migration created");
 }
