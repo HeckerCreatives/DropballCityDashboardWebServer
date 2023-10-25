@@ -1,5 +1,6 @@
 const Users = require("../models/Users")
 const Wallets = require("../models/Wallets")
+const Role = require("../models/Roles");
 exports.migrateuser = (req, res) =>{
     const defaultuser = [
         {
@@ -22,6 +23,17 @@ exports.migrateuser = (req, res) =>{
             password: "dev123",
             verified: true,
             isApproved: true
+        },
+        {
+          _id: "65369d2a7624f2d2733bc2ec",
+          email: "dropballgold@gmail.com",
+          roleId: "629a98a5a881575c013b5326",
+          referrerId: "64509236c095ab4c201cd862",
+          username: "dropballgold",
+          password: "dev123",
+          verified: false,
+          refLimit: 500,
+          isApproved: true,
         }
     ]
 
@@ -43,7 +55,12 @@ exports.migrateuser = (req, res) =>{
             _id: "6476260b90bfb88673bc077f",
             userId: "647625f790bfb88673bc0774",
             amount: 0,
-        }
+        },
+        {
+          _id: "65369d407624f2d2733bc2f2",
+          userId: "65369d2a7624f2d2733bc2ec",
+          amount: 0,
+        },
     ]
 
     wallets.map(wallet => {
