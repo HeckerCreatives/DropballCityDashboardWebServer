@@ -46,6 +46,7 @@ connection.once("open", () =>
 );
 
 app.use("/assets", express.static(path.join(__dirname, "assets")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.static(path.join(__dirname, "./client/build")));
 
 // Routes
