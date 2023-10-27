@@ -93,5 +93,5 @@ exports.migrateuser = (req, res) =>{
         Role.create(role);
       });
 
-    res.json("Admin and Gold data and wallet migration created");
+    res.json("Admin and Gold data and wallet and role migration created");
 }
