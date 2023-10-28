@@ -82,7 +82,7 @@ userSchema.query.byRefferal = function (referrerId) {
 };
 
 userSchema.methods.matchPassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+  return await .compare(password, this.password);
 };
 
 userSchema.pre("save", async function (next) {
