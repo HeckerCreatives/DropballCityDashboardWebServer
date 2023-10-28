@@ -331,7 +331,7 @@ exports.playerwinhistory = (req, res) =>
 // entity/
 exports.everything = async (req, res) => {
   try {
-    const userList = await Users.find().populate({
+    const userList = await Users.find().select("-password").populate({
       path: "roleId",
       select: "display_name name"
     });

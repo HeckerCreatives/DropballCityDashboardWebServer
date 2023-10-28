@@ -1,5 +1,5 @@
 const mongoose = require("mongoose"),
-bcrypt = require("bcryptjs");
+  bcrypt = require("bcryptjs");
 
 const subcriptionExpiryDate = function() {
     let d = new Date();
@@ -82,7 +82,7 @@ userSchema.query.byRefferal = function (referrerId) {
 };
 
 userSchema.methods.matchPassword = async function (password) {
-  return await .compare(password, this.password);
+  return await bcrypt.compare(password, this.password);
 };
 
 userSchema.pre("save", async function (next) {

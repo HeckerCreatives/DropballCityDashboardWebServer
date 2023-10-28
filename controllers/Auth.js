@@ -52,7 +52,7 @@ exports.save = (req, res) => {
     }
     
     User.create(req.body)
-    .then(user => res.json({message: `${user._id} saved successfully`, data: user}))
+    .then(user => res.json(`${user._id} saved successfully`))
     .catch(error => res.status(400).json({ error: error.message }));
 
   })

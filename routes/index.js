@@ -17,7 +17,6 @@ const routers = app => {
   app.use("/currency", require("./CurrencyTransfer"));
   app.use("/credits", require("./Credits"));
   app.use("/migrate", require("./Migrate"));
-  app.use("/game", require("./Playfabreg"));
   // app.use(middleware.notFound);
   // app.use(middleware.errorHandler);
 };
