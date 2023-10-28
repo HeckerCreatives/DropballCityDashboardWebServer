@@ -1,5 +1,5 @@
 const mongoose = require("mongoose"),
-{ bcrypt } = require("bcryptjs");
+bcrypt = require("bcryptjs");
 
 const subcriptionExpiryDate = function() {
     let d = new Date();
