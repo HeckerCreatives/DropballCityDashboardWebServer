@@ -24,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.5",
     "nodemailer": "^6.7.7",
+    "playfab-sdk": "^2.139.231013",
     "socket.io": "^4.5.1"
   },
   "engines": {
