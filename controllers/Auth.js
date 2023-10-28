@@ -1,6 +1,6 @@
 const User = require("../models/Users"),
   generateToken = require("../config/generateToken"),
-  bcrypt = require("bcryptjs"),
+  bcrypt = require("bcrypt"),
   fs = require("fs");
   const jwt = require("jsonwebtoken");
 
