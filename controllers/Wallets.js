@@ -403,7 +403,13 @@ exports.referrals = async (req, res) => {
     })
     const twentyFourHoursAgo = new Date();
     twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
-    
+
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
     const users = userList;
 
     const ids = userList.map(e => e._id)
@@ -411,7 +417,7 @@ exports.referrals = async (req, res) => {
     const downline = await Users.find({referrerId: {$in : ids}})
     const status = await PlayerWinHistory.find({
       Player: { $in: username },
-      createdAt: { $gte: twentyFourHoursAgo }
+      createdAt: { $gte: oneMonthAgo }
     });
     const walletPromises = users.map(async user => {
       const wallet = await Wallets.findOne({ userId: user._id });
