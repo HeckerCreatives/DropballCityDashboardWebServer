@@ -415,10 +415,27 @@ exports.referrals = async (req, res) => {
     const ids = userList.map(e => e._id)
     const username = userList.map(e => e.username)
     const downline = await Users.find({referrerId: {$in : ids}})
-    const status = await PlayerWinHistory.find({
-      Player: { $in: username },
-      createdAt: { $gte: oneMonthAgo }
-    });
+    const status = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Player: { $in: username },
+          createdAt: { $gte: oneMonthAgo} // You can adjust this based on your time criteria
+        }
+      },
+      {
+        $sort: { createdAt: -1 } // Sort by createdAt in descending order
+      },
+      {
+        $group: {
+          _id: "$Player",
+          latestRecord: { $first: "$$ROOT" } // Get the first document for each player (latest record)
+        }
+      },
+      {
+        $replaceRoot: { newRoot: "$latestRecord" } // Replace the root with the latest record for each player
+      }
+    ]);
+
     const walletPromises = users.map(async user => {
       const wallet = await Wallets.findOne({ userId: user._id });
       if (!wallet) {
