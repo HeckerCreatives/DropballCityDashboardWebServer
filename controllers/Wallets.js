@@ -415,10 +415,12 @@ exports.referrals = async (req, res) => {
     const ids = userList.map(e => e._id)
     const username = userList.map(e => e.username)
     const downline = await Users.find({referrerId: {$in : ids}})
+    const agent = await Users.findOne({_id: req.params.userId})
     const status = await PlayerWinHistory.aggregate([
       {
         $match: {
           Player: { $in: username },
+          Agent: agent.username,
           createdAt: { $gte: oneMonthAgo} // You can adjust this based on your time criteria
         }
       },
