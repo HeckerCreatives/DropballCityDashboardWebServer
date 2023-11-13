@@ -343,7 +343,8 @@ exports.everything = async (req, res) => {
       if (!wallet) {
         return Wallets.create({
           userId: user._id,
-          amount: 0
+          amount: 0,
+          commission: 0,
         });
       }
       return wallet;
@@ -404,8 +405,9 @@ exports.referrals = async (req, res) => {
     const users = userList;
 
     const ids = userList.map(e => e._id)
+    const username = userList.map(e => e.username)
     const downline = await Users.find({referrerId: {$in : ids}})
-    
+    const status = await PlayerWinHistory.find({Player: {$in: username}})
     const walletPromises = users.map(async user => {
       const wallet = await Wallets.findOne({ userId: user._id });
       if (!wallet) {
@@ -420,7 +422,7 @@ exports.referrals = async (req, res) => {
 
     const collection = await Promise.all(walletPromises);
     
-    res.json({ collection, users, downline });
+    res.json({ collection, users, downline, status });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
