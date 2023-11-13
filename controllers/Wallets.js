@@ -401,13 +401,18 @@ exports.referrals = async (req, res) => {
     }).then(user => {
       return user.filter(e => !e.deletedAt)
     })
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
     
     const users = userList;
 
     const ids = userList.map(e => e._id)
     const username = userList.map(e => e.username)
     const downline = await Users.find({referrerId: {$in : ids}})
-    const status = await PlayerWinHistory.findOne({Player: {$in: username}})
+    const status = await PlayerWinHistory.find({
+      Player: { $in: username },
+      createdAt: { $gte: twentyFourHoursAgo }
+    });
     const walletPromises = users.map(async user => {
       const wallet = await Wallets.findOne({ userId: user._id });
       if (!wallet) {
