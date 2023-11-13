@@ -407,7 +407,7 @@ exports.referrals = async (req, res) => {
     const ids = userList.map(e => e._id)
     const username = userList.map(e => e.username)
     const downline = await Users.find({referrerId: {$in : ids}})
-    const status = await PlayerWinHistory.find({Player: {$in: username}})
+    const status = await PlayerWinHistory.findOne({Player: {$in: username}})
     const walletPromises = users.map(async user => {
       const wallet = await Wallets.findOne({ userId: user._id });
       if (!wallet) {
