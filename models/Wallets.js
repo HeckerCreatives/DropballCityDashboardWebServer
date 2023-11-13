@@ -17,6 +17,7 @@ const walletSchema = new mongoose.Schema(
     },
     commission: {
       type: Number,
+      default: 0
     },
     pot: {
       type: Number,

@@ -403,12 +403,16 @@ exports.referrals = async (req, res) => {
     
     const users = userList;
 
+    const ids = userList.map(e => e._id)
+    const downline = await Users.find({referrerId: {$in : ids}})
+    
     const walletPromises = users.map(async user => {
       const wallet = await Wallets.findOne({ userId: user._id });
       if (!wallet) {
         return Wallets.create({
           userId: user._id,
-          amount: 0
+          amount: 0,
+          commission: 0
         });
       }
       return wallet;
@@ -416,7 +420,7 @@ exports.referrals = async (req, res) => {
 
     const collection = await Promise.all(walletPromises);
     
-    res.json({ collection, users });
+    res.json({ collection, users, downline });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
