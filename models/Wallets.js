@@ -22,6 +22,9 @@ const walletSchema = new mongoose.Schema(
     pot: {
       type: Number,
     },
+    agentpools: {
+      type: Number,
+    },
     deletedAt: {
       type: String,
     },

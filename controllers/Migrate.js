@@ -49,17 +49,20 @@ exports.migrateuser = (req, res) =>{
             initial: 0,
             commission: 0,
             pot: 0,
-            tong: 0
+            tong: 0,
+            agentpools: 0
         },
         {
             _id: "6476260b90bfb88673bc077f",
             userId: "647625f790bfb88673bc0774",
             amount: 0,
+            commission: 0,
         },
         {
           _id: "65369d407624f2d2733bc2f2",
           userId: "65369d2a7624f2d2733bc2ec",
           amount: 0,
+          commission: 0,
         },
     ]
 
