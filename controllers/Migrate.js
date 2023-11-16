@@ -91,6 +91,11 @@ exports.migrateuser = (req, res) =>{
           display_name: "Player",
           name: "player",
         },
+        {
+          _id: "629a98a5a881575c013b5329",
+          display_name: "Csr",
+          name: "csr",
+        },
       ];
       roles.map(role => {
         Role.create(role);
