@@ -75,6 +75,23 @@ exports.send = async (req, res) => {
                  res.json({ response: "failed" })
               }
           }            
+      } else if (agentDetails.roleId.name === "csr") {
+            
+        if (userDetails.length !== 0) {
+            
+            if (agentWallet[0].amount >= amount) {
+                
+                await SendCredit.create(sendhistory);
+                await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: -amount } });
+                await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: +amount } });
+    
+              await session.commitTransaction();
+              res.json({ response: "success" })
+            } else {
+               await  session.abortTransaction();
+               res.json({ response: "failed" })
+            }
+        }            
       }
         
         else {
@@ -162,7 +179,24 @@ exports.claim = async (req, res) => {
                  res.json({ response: "failed" })
               }
           }            
-      } 
+        } else if (agentDetails.roleId.name === "csr") {
+            
+          if (userDetails.length !== 0) {
+              
+              if (userWallet[0].amount >= amount) {
+                  
+                  await ClaimCredit.create(claimhistory);
+                  await Wallets.findOneAndUpdate({ userId: agentDetails._id}, { $inc: { amount: +amount } });
+                  await Wallets.findOneAndUpdate({ userId: userDetails._id }, { $inc: { amount: -amount } });
+      
+                await session.commitTransaction();
+                res.json({ response: "success" })
+              } else {
+                 await  session.abortTransaction();
+                 res.json({ response: "failed" })
+              }
+          }            
+        } 
         
         else {
           await  session.abortTransaction();
