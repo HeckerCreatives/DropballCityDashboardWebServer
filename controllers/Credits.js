@@ -119,7 +119,7 @@ exports.claim = async (req, res) => {
        });
       
       const userDetails = await Users.findOne({ username: username })
-      const agentWallet = await Wallets.find({ "userId": agentDetails._id })
+      // const agentWallet = await Wallets.find({ "userId": agentDetails._id })
       const userWallet = await Wallets.find({ "userId": userDetails._id })
 
       const claimhistory = {
