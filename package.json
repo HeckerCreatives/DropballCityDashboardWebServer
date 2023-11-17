@@ -26,7 +26,6 @@
     "nodemailer": "^6.7.7",
     "socket.io": "^4.5.1",
     "playfab-sdk": "^2.139.231013"
-    
   },
   "engines": {
     "node": ">=10.16.0 <=16.x.x",
