@@ -47,7 +47,7 @@ exports.convert = async (req, res) => {
                 return data.status
               })
               .catch(error => res.status(400).json({ error: error.message }));
-
+              console.log(stats)
               if(stats === "On"){
                 await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
               } else {
