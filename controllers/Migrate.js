@@ -1,6 +1,7 @@
 const Users = require("../models/Users")
 const Wallets = require("../models/Wallets")
 const Role = require("../models/Roles");
+const CommiOnOff = require("../models/Commionoff")
 exports.migrateuser = (req, res) =>{
     const defaultuser = [
         {
@@ -102,4 +103,13 @@ exports.migrateuser = (req, res) =>{
       });
 
     res.json("Admin and Gold data and wallet and role migration created");
+}
+
+exports.commionoff = (req, res) => {
+  const commiOnOff = {
+    _id: "629a98a5a881575c013b5340",
+    status: "Off"
+  }
+  CommiOnOff.create(commiOnOff)
+  res.json("commionoff created")
 }

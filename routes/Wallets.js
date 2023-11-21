@@ -23,12 +23,16 @@ const router = require("express").Router(),
     totalcommissionhistory,
     totaldeducthistory,
     convertpottogame,
-    plusfive
+    plusfive,
+    findcommionoff,
+    updatecommionoff
   } = require("../controllers/Wallets"),
   { protect, gameprotect } = require("../middleware");
 
 router
   .get("/", protect,browse)
+  .get("/findcommionoff", protect, findcommionoff)
+  .post("/updatecommionoff", protect, updatecommionoff)
   .post("/plusfive", protect, plusfive)
   .post("/deductionhistory", protect, deducthistory)
   .post("/totaldeductionhistory", protect, totaldeducthistory)

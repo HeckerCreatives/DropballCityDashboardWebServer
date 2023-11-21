@@ -2,9 +2,36 @@ const Wallets = require("../models/Wallets"),
   TransactionHistory = require("../models/TransactionHistory"),
   GCGametoWebHistory = require("../models/CreditBalancehistory.js"),
   Users = require("../models/Users"),
+  CommiOnOff = require("../models/Commionoff"),
   PlayerWinHistory = require("../models/Playerwinhistory");
   const { startOfDay, endOfDay, startOfMonth, endOfMonth, startOfYear, endOfYear } = require('date-fns');
 
+exports.updatecommionoff = (req, res) => {
+  const { stats } = req.body
+
+  CommiOnOff.findOneAndUpdate({_id: "629a98a5a881575c013b5340"}, {status: stats})
+  .then(data => {
+    if(data){
+      res.json({message: "success"})
+    } else {
+      res.json({message: "failed"})
+    }
+  })
+  .catch(error => res.status(400).json({ error: error.message }));
+}
+
+exports.findcommionoff = (req, res) => {
+
+  CommiOnOff.findOne({_id: "629a98a5a881575c013b5340"})
+  .then(data => {
+    if(data){
+      res.json({message: "success", data: data})
+    } else {
+      res.json({message: "failed"})
+    }
+  })
+  .catch(error => res.status(400).json({ error: error.message }));
+}
 
 exports.convert = async (req, res) => {
     const { username ,amount, type } = req.body
@@ -14,7 +41,18 @@ exports.convert = async (req, res) => {
         session.startTransaction();           
          const admin = await Users.find({username: username})       
           if (type === "commission") {
-              await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
+              const stats = await CommiOnOff.findOne({})
+              .then(data => {
+                return data.status
+              })
+              .catch(error => res.status(400).json({ error: error.message }));
+
+              if(stats === "On"){
+                await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
+              } else {
+                return res.json({message: "failed", data: "Commission cannot convert now contact admins for the schedule of commission conversion"})
+              }
+              
           } else if (type === "tong") {
               await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, tong: -amount}})
           } else if (type === "credit") {
