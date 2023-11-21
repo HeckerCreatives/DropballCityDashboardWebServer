@@ -39,21 +39,21 @@ exports.convert = async (req, res) => {
      const session = await Wallets.startSession();
       try {
         session.startTransaction();           
-         const admin = await Users.find({username: username})       
-          if (type === "commission") {
+         const admin = await Users.find({username: username})    
+         const stats = await CommiOnOff.findOne({})
+        .then(data => {
+          return data.status
+        })
+        .catch(error => res.status(400).json({ error: error.message }));  
 
-              const stats = await CommiOnOff.findOne({})
-              .then(data => {
-                return data.status
-              })
-              .catch(error => res.status(400).json({ error: error.message }));
-              console.log(stats)
-              if(stats === "On"){
-                await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
-              } else {
-                await session.abortTransaction();
-                return res.status(400).json({message: "failed", data: "Commission cannot convert now contact admins for the schedule of commission conversion"})
-              }
+        if(stats === "Off"){
+          await session.abortTransaction();
+          return res.status(400).json({message: "failed", data: "Commission cannot convert now contact admins for the schedule of commission conversion"})
+        } 
+
+          if (type === "commission" && stats === "On") {
+            await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
+              
           } else if (type === "tong") {
               await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, tong: -amount}})
           } else if (type === "credit") {
