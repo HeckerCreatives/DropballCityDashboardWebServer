@@ -41,7 +41,7 @@ exports.convert = async (req, res) => {
         session.startTransaction();           
          const admin = await Users.find({username: username})       
           if (type === "commission") {
-            
+
               const stats = await CommiOnOff.findOne({})
               .then(data => {
                 return data.status
@@ -51,7 +51,8 @@ exports.convert = async (req, res) => {
               if(stats === "On"){
                 await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
               } else {
-                return res.json({message: "failed", data: "Commission cannot convert now contact admins for the schedule of commission conversion"})
+                await session.abortTransaction();
+                return res.status(400).json({message: "failed", data: "Commission cannot convert now contact admins for the schedule of commission conversion"})
               }
           } else if (type === "tong") {
               await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, tong: -amount}})
