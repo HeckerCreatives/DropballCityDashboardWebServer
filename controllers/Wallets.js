@@ -52,7 +52,7 @@ exports.convert = async (req, res) => {
                 await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
               } else {
                 await session.abortTransaction();
-                return res.json({message: "failed", data: "Commission cannot convert now contact admins for the schedule of commission conversion"})
+                return res.status(400).json({message: "failed", data: "Commission cannot convert now contact admins for the schedule of commission conversion"})
               }
           } else if (type === "tong") {
               await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, tong: -amount}})
