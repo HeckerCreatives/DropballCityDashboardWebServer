@@ -873,3 +873,11 @@ exports.plusfive = async  (req, res) => {
   }
   session.endSession();
 }
+
+exports.topagents = async (req, res) => {
+  Wallets.find({}, {sort: {"commission": -1}, limit: 1})
+  .then(data => {
+    res.json({message: "success", data: data})
+  })
+  .catch(error => res.status(400).json({ error: error.message }));
+}

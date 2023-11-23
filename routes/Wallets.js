@@ -25,12 +25,14 @@ const router = require("express").Router(),
     convertpottogame,
     plusfive,
     findcommionoff,
-    updatecommionoff
+    updatecommionoff,
+    topagents
   } = require("../controllers/Wallets"),
   { protect, gameprotect } = require("../middleware");
 
 router
   .get("/", protect,browse)
+  .get("/topagents", topagents)
   .get("/findcommionoff", protect, findcommionoff)
   .post("/updatecommionoff", protect, updatecommionoff)
   .post("/plusfive", protect, plusfive)
