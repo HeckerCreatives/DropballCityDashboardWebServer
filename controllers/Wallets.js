@@ -875,7 +875,7 @@ exports.plusfive = async  (req, res) => {
 }
 
 exports.topagents = async (req, res) => {
-  Wallets.find({})
+  Wallets.find({ _id: { $ne: mongoose.Types.ObjectId("6450930b69622f8f6382d3a7") } })
   .sort({"commission": -1})
   .limit(15)
   .then(data => {
