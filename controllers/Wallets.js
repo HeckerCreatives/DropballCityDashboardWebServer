@@ -875,7 +875,9 @@ exports.plusfive = async  (req, res) => {
 }
 
 exports.topagents = async (req, res) => {
-  Wallets.find({}, {sort: {"commission": -1}, limit: 1})
+  Wallets.find({})
+  .sort({"commission": -1})
+  .limit(15)
   .then(data => {
     res.json({message: "success", data: data})
   })
