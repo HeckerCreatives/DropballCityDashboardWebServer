@@ -882,7 +882,14 @@ exports.topagents = async (req, res) => {
   .sort({"commission": -1})
   .limit(15)
   .then(data => {
-    res.json({message: "success", data: data})
+    const namber = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+    const persent = [25,20,15,10,8,5,4,3,2,2,2,1,1,1,1]
+    const finaldata = {
+      "rank": namber,
+      "agents": data,
+      "percentage": persent
+    }
+    res.json({message: "success", data: finaldata})
   })
   .catch(error => res.status(400).json({ error: error.message }));
 }
