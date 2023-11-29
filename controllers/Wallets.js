@@ -62,6 +62,8 @@ exports.convert = async (req, res) => {
             await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { pot: -amount}})
           } else if (type === "agentpools") {
             await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { agentpools: amount, amount: -amount}})
+          } else if (type === "resetagentpools") {
+            await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { agentpools: -amount, amount: amount}})
           }
 
          res.json({ response: "success" })
