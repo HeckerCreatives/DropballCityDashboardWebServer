@@ -1,9 +1,10 @@
 const User = require("../models/Users"),
+  Wallets = require("../models/Wallets"),
   generateToken = require("../config/generateToken"),
   bcrypt = require("bcryptjs"),
   fs = require("fs");
   const jwt = require("jsonwebtoken");
-
+  
 const generategameToken = () => 
   jwt.sign({ message: "titimalaki" }, process.env.JWT_SECRET);
 
@@ -52,7 +53,14 @@ exports.save = (req, res) => {
     }
     
     User.create(req.body)
-    .then(user => res.json({message: `${user._id} saved successfully`, data: user}))
+    .then(async user => {
+      await Wallets.create({
+        userId: user._id,
+        amount: 0,
+        commission: 0,
+      })
+      res.json({message: `${user._id} saved successfully`, data: user})
+    })
     .catch(error => res.status(400).json({ error: error.message }));
 
   })
