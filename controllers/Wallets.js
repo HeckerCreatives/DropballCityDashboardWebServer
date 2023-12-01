@@ -775,7 +775,7 @@ exports.totalcommissionperday = async (req, res) => {
         }
       }
     ])
-    const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
+    const data = perDay[0]?.totalcommission - (perDay.length ? deductperDay[0]?.totaldeduction : 0)
     console.log(data)
     console.log(perDay[0]?.totalcommission)
     console.log(deductperDay[0]?.totaldeduction)
