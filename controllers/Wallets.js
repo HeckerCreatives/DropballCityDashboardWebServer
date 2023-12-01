@@ -785,7 +785,6 @@ exports.totalcommissionpermonth = async (req, res) => {
   const currentstartOfMonth = startOfMonth(currentDate);
   const currentendOfMonth = endOfMonth(currentDate);
   const user = await Users.find({username: agent}).populate({path: "roleId"})
-  const wallet = await Wallets.findOne({userId: user[0]._id})
   if(user[0].roleId.name === "admin"){
     const perMonth = await TransactionHistory.aggregate([
       {
@@ -801,7 +800,23 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    const data = perMonth[0]?.totalcommission - wallet.commission
+
+    const deductperMonth = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentstartOfMonth, $lte: currentendOfMonth}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+
+    const data = perMonth[0]?.totalcommission - deductperMonth[0]?.totaldeduction
     res.json(perMonth.length ? data: 0)
   } else if (user[0].roleId.name === "gold"){
     const perMonth = await TransactionHistory.aggregate([
@@ -818,8 +833,24 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    const data = perMonth[0]?.totalcommission - wallet.commission
-    res.json(perMonth.length? data: 0)
+    
+    const deductperMonth = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentstartOfMonth, $lte: currentendOfMonth}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+
+    const data = perMonth[0]?.totalcommission - deductperMonth[0]?.totaldeduction
+    res.json(perMonth.length ? data: 0)
   } else if (user[0].roleId.name === "silver"){
     const perMonth = await TransactionHistory.aggregate([
       {
@@ -835,8 +866,24 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    const data = perMonth[0]?.totalcommission - wallet.commission
-    res.json(perMonth.length? data: 0)
+    
+    const deductperMonth = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentstartOfMonth, $lte: currentendOfMonth}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+
+    const data = perMonth[0]?.totalcommission - deductperMonth[0]?.totaldeduction
+    res.json(perMonth.length ? data: 0)
   }
     
 
@@ -867,7 +914,23 @@ exports.totalcommissionperyear = async (req, res) => {
         }
       }
     ])
-    const data = perYear[0]?.totalcommission - wallet.commission
+
+    const deductperYear = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentstartOfYear, $lte: currentendOfYear}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+
+    const data = perYear[0]?.totalcommission - deductperYear[0]?.totaldeduction
     res.json(perYear.length? data: 0)
   } else if (user[0].roleId.name === "gold"){
     const perYear = await TransactionHistory.aggregate([
@@ -884,7 +947,23 @@ exports.totalcommissionperyear = async (req, res) => {
         }
       }
     ])
-    const data = perYear[0]?.totalcommission - wallet.commission
+
+    const deductperYear = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentstartOfYear, $lte: currentendOfYear}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+
+    const data = perYear[0]?.totalcommission - deductperYear[0]?.totaldeduction
     res.json(perYear.length? data: 0)
   } else if (user[0].roleId.name === "silver"){
     const perYear = await TransactionHistory.aggregate([
@@ -901,7 +980,23 @@ exports.totalcommissionperyear = async (req, res) => {
         }
       }
     ])
-    const data = perYear[0]?.totalcommission - wallet.commission
+    
+    const deductperYear = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentstartOfYear, $lte: currentendOfYear}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+
+    const data = perYear[0]?.totalcommission - deductperYear[0]?.totaldeduction
     res.json(perYear.length? data: 0)
   }
 }
