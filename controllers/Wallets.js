@@ -774,7 +774,10 @@ exports.totalcommissionperday = async (req, res) => {
       }
     ])
     const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
-    res.json(perDay.length? data: 0)
+    console.log(data)
+    console.log(perDay[0]?.totalcommission)
+    console.log(deductperDay[0]?.totaldeduction)
+    res.json(perDay.length ? data : 0)
   } else if (user[0].roleId.name === "silver"){
     const perDay = await TransactionHistory.aggregate([
       {
