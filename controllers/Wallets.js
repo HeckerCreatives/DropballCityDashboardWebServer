@@ -309,7 +309,8 @@ exports.totalcommissionhistory = async (req, res) => {
     ])
     .then(result => {
       if (result.length === 0) {
-        return res.json({ totalAmount: 0 });
+        const data = result[0]?.totalAmount - result1[0]?.totalAmount
+        return res.json(data);
       } else {
 
         PlayerWinHistory.aggregate([
@@ -327,7 +328,8 @@ exports.totalcommissionhistory = async (req, res) => {
         ])
         .then(result1 => {
           if (result1.length === 0) {
-            return res.json({ totalAmount: 0 });
+            const data = result[0]?.totalAmount - result1[0]?.totalAmount
+            return res.json(data);
           } else {
             const data = result[0]?.totalAmount - result1[0]?.totalAmount
             return res.json(data);
