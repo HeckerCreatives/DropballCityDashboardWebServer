@@ -740,7 +740,9 @@ exports.totalcommissionperday = async (req, res) => {
         }
       }
     ])
-
+    console.log(data)
+    console.log(perDay[0]?.totalcommission)
+    console.log(deductperDay[0]?.totaldeduction)
     const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
     res.json(perDay.length? data: 0)
   } else if (user[0].roleId.name === "gold"){
@@ -809,6 +811,9 @@ exports.totalcommissionperday = async (req, res) => {
       }
     ])
     const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
+    console.log(data)
+    console.log(perDay[0]?.totalcommission)
+    console.log(deductperDay[0]?.totaldeduction)
     res.json(perDay.length? data: 0)
   }
 }
