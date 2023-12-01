@@ -737,7 +737,7 @@ exports.totalcommissionpermonth = async (req, res) => {
   const currentstartOfMonth = startOfMonth(currentDate);
   const currentendOfMonth = endOfMonth(currentDate);
   const user = await Users.find({username: agent}).populate({path: "roleId"})
-  
+  const wallet = await Wallets.findOne({userId: user[0]._id})
   if(user[0].roleId.name === "admin"){
     const perMonth = await TransactionHistory.aggregate([
       {
@@ -753,7 +753,8 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    res.json(perMonth.length? perMonth[0].totalcommission: 0)
+    const data = (perMonth[0].totalcommission - wallet.commission)
+    res.json(perMonth.length? data: 0)
   } else if (user[0].roleId.name === "gold"){
     const perMonth = await TransactionHistory.aggregate([
       {
@@ -769,7 +770,8 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    res.json(perMonth.length? perMonth[0].totalcommission: 0)
+    const data = (perMonth[0].totalcommission - wallet.commission)
+    res.json(perMonth.length? data: 0)
   } else if (user[0].roleId.name === "silver"){
     const perMonth = await TransactionHistory.aggregate([
       {
@@ -785,7 +787,8 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    res.json(perMonth.length? perMonth[0].totalcommission: 0)
+    const data = (perMonth[0].totalcommission - wallet.commission)
+    res.json(perMonth.length? data: 0)
   }
     
 
