@@ -757,7 +757,7 @@ exports.totalcommissionpermonth = async (req, res) => {
     // console.log(data)
     // console.log()
     console.log(wallet.commission)
-    res.json(perMonth.length? perMonth[0].totalcommission: 0)
+    res.json(perMonth.length ? perMonth[0].totalcommission - wallet.commission: 0)
   } else if (user[0].roleId.name === "gold"){
     const perMonth = await TransactionHistory.aggregate([
       {
