@@ -678,7 +678,6 @@ exports.totalcommissionperday = async (req, res) => {
   const currentEndOfDay = endOfDay(currentDate);
 
   const user = await Users.find({username: agent}).populate({path: "roleId"})
-  
   if(user[0].roleId.name === "admin"){
     const perDay = await TransactionHistory.aggregate([
       {
@@ -694,7 +693,24 @@ exports.totalcommissionperday = async (req, res) => {
         }
       }
     ])
-    res.json(perDay.length? perDay[0].totalcommission: 0)
+
+    const deductperDay = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentStartOfDay, $lte: currentEndOfDay}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+
+    const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
+    res.json(perDay.length? data: 0)
   } else if (user[0].roleId.name === "gold"){
     const perDay = await TransactionHistory.aggregate([
       {
@@ -710,7 +726,23 @@ exports.totalcommissionperday = async (req, res) => {
         }
       }
     ])
-    res.json(perDay.length? perDay[0].totalcommission: 0)
+
+    const deductperDay = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentStartOfDay, $lte: currentEndOfDay}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+    const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
+    res.json(perDay.length? data: 0)
   } else if (user[0].roleId.name === "silver"){
     const perDay = await TransactionHistory.aggregate([
       {
@@ -726,7 +758,23 @@ exports.totalcommissionperday = async (req, res) => {
         }
       }
     ])
-    res.json(perDay.length? perDay[0].totalcommission: 0)
+    
+    const deductperDay = await PlayerWinHistory.aggregate([
+      {
+        $match: {
+          Agent: agent,
+          createdAt: {$gte: currentStartOfDay, $lte: currentEndOfDay}
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totaldeduction: {$sum: "$WinAmount"}
+        }
+      }
+    ])
+    const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
+    res.json(perDay.length? data: 0)
   }
 }
 
