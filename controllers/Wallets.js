@@ -147,6 +147,7 @@ exports.loseTransfer = async (req, res) => {
       const silverDetails = users.filter((i) => i.username == silverUsername);  
       const adminDetails = users.filter((i) => i.username == adminUsername); 
       const player = await Users.find({playfabId: playfabId}).populate({path: "referrerId"})
+      const uplinetodeduct = await Users.findOne({_id: player[0]?.referrerId._id}).populate({path: "referrerId"})
       let g;
       let a;
       // let jackpotWalletPer;
@@ -171,6 +172,7 @@ exports.loseTransfer = async (req, res) => {
       const commissionPer = adminPer;
       const win60 = winAmount * .60;
       const win40 = winAmount * .40;
+      const win20 = winAmount * .20;
 
       const transactionParams = {
         tongAmount: tongWallet,
@@ -212,7 +214,12 @@ exports.loseTransfer = async (req, res) => {
           await Wallets.findOneAndUpdate({ userId: silverDetails[0]?._id}, { $inc: { commission: +silverPer } })
           await TransactionHistory.create(transactionParams)
 
-          await Wallets.findOneAndUpdate({userId: player[0]?.referrerId._id}, {$inc: {commission: -win60}})
+          if(uplinetodeduct.length !== 0 && uplinetodeduct?.roleId.name === "gold"){
+            await Wallets.findOneAndUpdate({userId: uplinetodeduct?.referrerId._id}, {$inc: {commission: -win20}})
+          }
+          
+          await Wallets.findOneAndUpdate({userId: player[0]?.referrerId._id}, {$inc: {commission: uplinetodeduct?.roleId.name === "gold" ? -win40 : -win60}})
+
           await Wallets.findOneAndUpdate({ userId: adminDetails[0]?._id}, { $inc: { commission: -win40}})
 
           await PlayerWinHistory.create(Winner60)
