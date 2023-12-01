@@ -329,6 +329,8 @@ exports.totalcommissionhistory = async (req, res) => {
           if (result1.length === 0) {
             return res.json({ totalAmount: 0 });
           } else {
+            console.log(result[0])
+            console.log(result1[0])
             const data = result[0] - result1[0]
             return res.json(data);
           }
