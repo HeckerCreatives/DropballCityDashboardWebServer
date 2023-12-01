@@ -753,7 +753,7 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    const data = perMonth[0].totalcommission - wallet.commission
+    // const data = perMonth[0].totalcommission - wallet.commission
     console.log(data)
     console.log(perMonth[0].totalcommission)
     console.log(wallet.commission)
@@ -773,7 +773,7 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    const data = (perMonth[0].totalcommission - wallet.commission)
+    // const data = (perMonth[0].totalcommission - wallet.commission)
     res.json(perMonth.length? data: 0)
   } else if (user[0].roleId.name === "silver"){
     const perMonth = await TransactionHistory.aggregate([
@@ -790,7 +790,7 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    const data = (perMonth[0].totalcommission - wallet.commission)
+    // const data = (perMonth[0].totalcommission - wallet.commission)
     res.json(perMonth.length? data: 0)
   }
     
