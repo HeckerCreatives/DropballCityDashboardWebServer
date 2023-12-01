@@ -741,11 +741,15 @@ exports.totalcommissionperday = async (req, res) => {
       }
     ])
     
-    const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
-    console.log(data)
-    console.log(perDay[0]?.totalcommission)
-    console.log(deductperDay[0]?.totaldeduction)
-    res.json(perDay.length? data: 0)
+    if(perDay[0]?.totalcommission !== undefined && deductperDay[0]?.totaldeduction !== undefined){
+      const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
+      console.log(data)
+      console.log(perDay[0]?.totalcommission)
+      console.log(deductperDay[0]?.totaldeduction)
+      res.json(perDay.length? data: 0)
+    } else {
+      res.json(0)
+    }
   } else if (user[0].roleId.name === "gold"){
     const perDay = await TransactionHistory.aggregate([
       {
@@ -776,11 +780,15 @@ exports.totalcommissionperday = async (req, res) => {
         }
       }
     ])
-    const data = perDay[0]?.totalcommission - (perDay.length ? deductperDay[0]?.totaldeduction : 0)
-    console.log(data)
-    console.log(perDay[0]?.totalcommission)
-    console.log(deductperDay[0]?.totaldeduction)
-    res.json(perDay.length ? data : 0)
+    if(perDay[0]?.totalcommission !== undefined && deductperDay[0]?.totaldeduction !== undefined){
+      const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
+      console.log(data)
+      console.log(perDay[0]?.totalcommission)
+      console.log(deductperDay[0]?.totaldeduction)
+      res.json(perDay.length? data: 0)
+    } else {
+      res.json(0)
+    }
   } else if (user[0].roleId.name === "silver"){
     const perDay = await TransactionHistory.aggregate([
       {
@@ -811,11 +819,17 @@ exports.totalcommissionperday = async (req, res) => {
         }
       }
     ])
-    const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
-    console.log(data)
-    console.log(perDay[0]?.totalcommission)
-    console.log(deductperDay[0]?.totaldeduction)
-    res.json(perDay.length? data: 0)
+
+    if(perDay[0]?.totalcommission !== undefined && deductperDay[0]?.totaldeduction !== undefined){
+      const data = perDay[0]?.totalcommission - deductperDay[0]?.totaldeduction
+      console.log(data)
+      console.log(perDay[0]?.totalcommission)
+      console.log(deductperDay[0]?.totaldeduction)
+      res.json(perDay.length? data: 0)
+    } else {
+      res.json(0)
+    }
+    
   }
 }
 
@@ -856,9 +870,13 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-
-    const data = perMonth[0]?.totalcommission - deductperMonth[0]?.totaldeduction
-    res.json(perMonth.length ? data: 0)
+    if(perMonth[0]?.totalcommission !== undefined && deductperMonth[0]?.totaldeduction !== undefined){
+      const data = perMonth[0]?.totalcommission - deductperMonth[0]?.totaldeduction
+      res.json(perMonth.length ? data: 0)
+    } else {
+      res.json(0)
+    }
+    
   } else if (user[0].roleId.name === "gold"){
     const perMonth = await TransactionHistory.aggregate([
       {
@@ -890,8 +908,12 @@ exports.totalcommissionpermonth = async (req, res) => {
       }
     ])
 
-    const data = perMonth[0]?.totalcommission - deductperMonth[0]?.totaldeduction
-    res.json(perMonth.length ? data: 0)
+    if(perMonth[0]?.totalcommission !== undefined && deductperMonth[0]?.totaldeduction !== undefined){
+      const data = perMonth[0]?.totalcommission - deductperMonth[0]?.totaldeduction
+      res.json(perMonth.length ? data: 0)
+    } else {
+      res.json(0)
+    }
   } else if (user[0].roleId.name === "silver"){
     const perMonth = await TransactionHistory.aggregate([
       {
@@ -923,8 +945,12 @@ exports.totalcommissionpermonth = async (req, res) => {
       }
     ])
 
-    const data = perMonth[0]?.totalcommission - deductperMonth[0]?.totaldeduction
-    res.json(perMonth.length ? data: 0)
+    if(perMonth[0]?.totalcommission !== undefined && deductperMonth[0]?.totaldeduction !== undefined){
+      const data = perMonth[0]?.totalcommission - deductperMonth[0]?.totaldeduction
+      res.json(perMonth.length ? data: 0)
+    } else {
+      res.json(0)
+    }
   }
     
 
@@ -970,9 +996,13 @@ exports.totalcommissionperyear = async (req, res) => {
         }
       }
     ])
-
-    const data = perYear[0]?.totalcommission - deductperYear[0]?.totaldeduction
-    res.json(perYear.length? data: 0)
+    if(perYear[0]?.totalcommission !== undefined && deductperYear[0]?.totaldeduction !== undefined){
+      const data = perYear[0]?.totalcommission - deductperYear[0]?.totaldeduction
+      res.json(perYear.length? data: 0)
+    } else {
+      res.json(0)
+    }
+    
   } else if (user[0].roleId.name === "gold"){
     const perYear = await TransactionHistory.aggregate([
       {
@@ -1004,8 +1034,12 @@ exports.totalcommissionperyear = async (req, res) => {
       }
     ])
 
-    const data = perYear[0]?.totalcommission - deductperYear[0]?.totaldeduction
-    res.json(perYear.length? data: 0)
+    if(perYear[0]?.totalcommission !== undefined && deductperYear[0]?.totaldeduction !== undefined){
+      const data = perYear[0]?.totalcommission - deductperYear[0]?.totaldeduction
+      res.json(perYear.length? data: 0)
+    } else {
+      res.json(0)
+    }
   } else if (user[0].roleId.name === "silver"){
     const perYear = await TransactionHistory.aggregate([
       {
@@ -1037,8 +1071,12 @@ exports.totalcommissionperyear = async (req, res) => {
       }
     ])
 
-    const data = perYear[0]?.totalcommission - deductperYear[0]?.totaldeduction
-    res.json(perYear.length? data: 0)
+    if(perYear[0]?.totalcommission !== undefined && deductperYear[0]?.totaldeduction !== undefined){
+      const data = perYear[0]?.totalcommission - deductperYear[0]?.totaldeduction
+      res.json(perYear.length? data: 0)
+    } else {
+      res.json(0)
+    }
   }
 }
 
