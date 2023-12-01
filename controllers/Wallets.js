@@ -258,9 +258,6 @@ exports.loseTransfer = async (req, res) => {
             await PlayerWinHistory.create(Winner60)
             await PlayerWinHistory.create(Winner40)
           }
-         
-
-          
 
         res.json({message: "success"});
         await session.commitTransaction();
