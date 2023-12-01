@@ -754,7 +754,7 @@ exports.totalcommissionpermonth = async (req, res) => {
       }
     ])
     // const data = perMonth[0].totalcommission - wallet.commission
-    console.log(data)
+    // console.log(data)
     console.log(perMonth[0].totalcommission)
     console.log(wallet.commission)
     res.json(perMonth.length? data: 0)
