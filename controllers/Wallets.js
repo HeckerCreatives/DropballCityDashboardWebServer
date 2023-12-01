@@ -189,20 +189,51 @@ exports.loseTransfer = async (req, res) => {
         Round: round,
       }
 
-      const Winner60 = {
-        Player: player[0].username,
-        Agent: player[0].referrerId.username,
-        WinAmount: win60,
-        Game: game,
-        Round: round, 
-      }
+      let Winner20
+      let Winner40
+      let Winner60
+      
+      if(silverDetails.length !== 0){
+        Winner60 = {
+          Player: player[0].username,
+          Agent:  silverDetails[0]?.username,
+          WinAmount: win40,
+          Game: game,
+          Round: round, 
+        }
+  
+        Winner40 = {
+          Player: player[0].username,
+          Agent: adminUsername,
+          WinAmount: win40,
+          Game: game,
+          Round: round,
+        }
 
-      const Winner40 = {
-        Player: player[0].username,
-        Agent: adminUsername,
-        WinAmount: win40,
-        Game: game,
-        Round: round,
+        Winner20 = {
+          Player: player[0].username,
+          Agent: goldDetails[0]?.username,
+          WinAmount: win20,
+          Game: game,
+          Round: round,
+        }
+
+      } else {
+        Winner60 = {
+          Player: player[0].username,
+          Agent: goldDetails[0]?.username,
+          WinAmount: win60,
+          Game: game,
+          Round: round, 
+        }
+  
+        Winner40 = {
+          Player: player[0].username,
+          Agent: adminUsername,
+          WinAmount: win40,
+          Game: game,
+          Round: round,
+        }
       }
 
       const session = await Wallets.startSession();
@@ -215,16 +246,21 @@ exports.loseTransfer = async (req, res) => {
 
           if(silverDetails.length !== 0){
             await Wallets.findOneAndUpdate({userId: goldDetails[0]?._id}, {$inc: {commission: -win20}})
-            await Wallets.findOneAndUpdate({userId: silverDetails[0]?._id}, {$inc: {commission: -win40}})
+            await Wallets.findOneAndUpdate({userId: silverDetails[0]?._id}, {$inc: {commission: -win40}}) //for history porpose winner60
             await Wallets.findOneAndUpdate({ userId: adminDetails[0]?._id}, { $inc: { commission: -win40}})
+            await PlayerWinHistory.create(Winner20)
+            await PlayerWinHistory.create(Winner60)
+            await PlayerWinHistory.create(Winner40)
+            
           } else {
             await Wallets.findOneAndUpdate({userId: goldDetails[0]?._id}, {$inc: {commission: -win60}})
             await Wallets.findOneAndUpdate({ userId: adminDetails[0]?._id}, { $inc: { commission: -win40}})
+            await PlayerWinHistory.create(Winner60)
+            await PlayerWinHistory.create(Winner40)
           }
          
 
-          await PlayerWinHistory.create(Winner60)
-          await PlayerWinHistory.create(Winner40)
+          
 
         res.json({message: "success"});
         await session.commitTransaction();
