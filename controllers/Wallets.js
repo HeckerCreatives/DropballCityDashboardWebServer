@@ -753,11 +753,8 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    // const data = perMonth[0].totalcommission - wallet.commission
-    // console.log(data)
-    // console.log()
-    console.log(wallet.commission)
-    res.json(perMonth.length ? perMonth[0].totalcommission - wallet.commission: 0)
+    const data = perMonth[0]?.totalcommission - wallet.commission
+    res.json(perMonth.length ? data: 0)
   } else if (user[0].roleId.name === "gold"){
     const perMonth = await TransactionHistory.aggregate([
       {
@@ -773,7 +770,7 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    // const data = (perMonth[0].totalcommission - wallet.commission)
+    const data = perMonth[0]?.totalcommission - wallet.commission
     res.json(perMonth.length? data: 0)
   } else if (user[0].roleId.name === "silver"){
     const perMonth = await TransactionHistory.aggregate([
@@ -790,7 +787,7 @@ exports.totalcommissionpermonth = async (req, res) => {
         }
       }
     ])
-    // const data = (perMonth[0].totalcommission - wallet.commission)
+    const data = perMonth[0]?.totalcommission - wallet.commission
     res.json(perMonth.length? data: 0)
   }
     
@@ -806,7 +803,7 @@ exports.totalcommissionperyear = async (req, res) => {
   const currentendOfYear = endOfYear(currentDate);
 
   const user = await Users.find({username: agent}).populate({path: "roleId"})
-  
+  const wallet = await Wallets.findOne({userId: user[0]._id})
   if(user[0].roleId.name === "admin"){
     const perYear = await TransactionHistory.aggregate([
       {
@@ -822,7 +819,8 @@ exports.totalcommissionperyear = async (req, res) => {
         }
       }
     ])
-    res.json(perYear.length? perYear[0].totalcommission: 0)
+    const data = perYear[0]?.totalcommission - wallet.commission
+    res.json(perYear.length? data: 0)
   } else if (user[0].roleId.name === "gold"){
     const perYear = await TransactionHistory.aggregate([
       {
@@ -838,7 +836,8 @@ exports.totalcommissionperyear = async (req, res) => {
         }
       }
     ])
-    res.json(perYear.length? perYear[0].totalcommission: 0)
+    const data = perYear[0]?.totalcommission - wallet.commission
+    res.json(perYear.length? data: 0)
   } else if (user[0].roleId.name === "silver"){
     const perYear = await TransactionHistory.aggregate([
       {
@@ -854,7 +853,8 @@ exports.totalcommissionperyear = async (req, res) => {
         }
       }
     ])
-    res.json(perYear.length? perYear[0].totalcommission: 0)
+    const data = perYear[0]?.totalcommission - wallet.commission
+    res.json(perYear.length? data: 0)
   }
 }
 
