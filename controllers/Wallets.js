@@ -311,7 +311,31 @@ exports.totalcommissionhistory = async (req, res) => {
       if (result.length === 0) {
         return res.json({ totalAmount: 0 });
       } else {
-        return res.json(result[0]);
+
+        PlayerWinHistory.aggregate([
+          {
+            $match: {
+              Agent: agent
+            }
+          },
+          {
+            $group: {
+              _id: null,
+              totalAmount: { $sum: `$WinAmount` }
+            }
+          }
+        ])
+        .then(result1 => {
+          if (result1.length === 0) {
+            return res.json({ totalAmount: 0 });
+          } else {
+            const data = result[0] - result1[0]
+            return res.json(data);
+          }
+        })
+        .catch((error) => {
+          res.status(400).json({ message: "BadRequest", error: error.message });
+        });
       }
     })
     .catch(error => res.status(500).json({ error: error.message }));
