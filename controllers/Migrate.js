@@ -102,6 +102,12 @@ exports.migrateuser = (req, res) =>{
         Role.create(role);
       });
 
+      const commiOnOff = {
+        _id: "629a98a5a881575c013b5340",
+        status: "Off"
+      }
+      CommiOnOff.create(commiOnOff)
+
     res.json("Admin and Gold data and wallet and role migration created");
 }
 
