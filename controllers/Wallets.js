@@ -46,10 +46,10 @@ exports.convert = async (req, res) => {
         })
         .catch(error => res.status(400).json({ error: error.message }));  
 
-        if(stats === "Off"){
-          await session.abortTransaction();
-          return res.status(400).json({message: "failed", data: "Commission cannot convert now contact admins for the schedule of commission conversion"})
-        } 
+        // if(stats === "Off"){
+        //   await session.abortTransaction();
+        //   return res.status(400).json({message: "failed", data: "Commission cannot convert now contact admins for the schedule of commission conversion"})
+        // } 
 
           if (type === "commission" && stats === "On") {
             await Wallets.findOneAndUpdate({ userId: admin[0]._id}, { $inc: { amount: +amount, commission: -amount}})
@@ -155,7 +155,7 @@ exports.loseTransfer = async (req, res) => {
        g = silverDetails.length !== 0 ? 20 : 60;
       //  a = goldDetails.length !== 0 ? 50 : 97;
       // jackpotWalletPer = (loseWallet / 100) * 3;
-      a = 37;
+        a = 37;
       } else {
         g = silverDetails.length !== 0 ? 20 : 60;
         // a = goldDetails.length !== 0 ? 40 : 97;
